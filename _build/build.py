@@ -92,7 +92,7 @@ footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-
 .wa-float{position:fixed;right:16px;bottom:20px;z-index:40;display:flex;align-items:center;gap:8px;background:#25d366;color:#fff;text-decoration:none;border-radius:999px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);font:600 .9rem system-ui;animation:waring 2.4s ease-out infinite}
 .wa-float span{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .3s}.wa-float:hover span,.wa-float:focus span{max-width:140px;padding-right:4px}
 @keyframes waring{0%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 14px rgba(37,211,102,0)}100%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 0 rgba(37,211,102,0)}}
-@media(max-width:860px){.wa-float{bottom:86px;right:12px;padding:11px}}
+@media(max-width:860px){.wa-float{bottom:84px;right:6px;padding:9px}.wa-float svg{width:24px;height:24px}.pack .r{padding-right:10px}}
 /* attention animations: gentle, and off for people who ask for less motion */
 @keyframes shine{0%{transform:translateX(-120%) skewX(-20deg)}55%,100%{transform:translateX(260%) skewX(-20deg)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
