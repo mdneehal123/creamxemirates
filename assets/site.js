@@ -3,7 +3,7 @@ var C=window.STORE||{};var $=function(s){return document.querySelector(s)};
 function pack(){var r=document.querySelector('input[name=pack]:checked');return C.packs.filter(function(p){return p.id===(r?r.value:'p1')})[0]}
 function rs(n){return '₹'+n.toLocaleString('en-IN')}
 function sync(){var p=pack();if(!p)return;var mrp=C.mrp*p.jars;document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=rs(p.price)});
-document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});document.querySelectorAll('[data-online]').forEach(function(e){e.textContent=rs(p.price-C.off)});payLabel();
+document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});document.querySelectorAll('[data-online]').forEach(function(e){e.textContent=rs(p.price-C.off)});document.querySelectorAll('[data-codprice]').forEach(function(e){e.textContent=rs(p.price+C.cod)});payLabel();
 var o=$('#oPack');if(o)o.value=p.id;var t=document.querySelectorAll('.gal-thumbs button');var k=p.jars===2?3:0;if(t[k]&&sync.ready){t[k].click()}sync.ready=true}
 document.querySelectorAll('input[name=pack]').forEach(function(i){i.addEventListener('change',sync)});
 var op=$('#oPack');if(op)op.addEventListener('change',function(){var r=document.querySelector('input[name=pack][value='+op.value+']');if(r){r.checked=true;sync()}});
@@ -18,7 +18,7 @@ function wa(t){var a=document.createElement('a');a.href='https://wa.me/'+C.wa+'?
 document.querySelectorAll('[data-wa-order]').forEach(function(b){b.addEventListener('click',function(){var p=pack();wa('Hi, I want to order '+C.product+' ('+C.size+'): '+p.label+' for '+rs(p.price)+', Cash on Delivery.')})});
 // payment choice: online (Razorpay) first, COD second
 function paym(){var r=document.querySelector('input[name=paym]:checked');return r?r.value:'online'}
-function payLabel(){var b=$('#oGo'),p=pack();if(!b||!p||b.disabled)return;b.textContent=paym()==='online'?'Pay '+rs(p.price-C.off)+' securely':'Place order · Cash on Delivery '+rs(p.price)}
+function payLabel(){var b=$('#oGo'),p=pack();if(!b||!p||b.disabled)return;b.textContent=paym()==='online'?'Pay '+rs(p.price-C.off)+' securely':'Place order · Cash on Delivery '+rs(p.price+C.cod)}
 document.querySelectorAll('input[name=paym]').forEach(function(i){i.addEventListener('change',payLabel)});
 document.querySelectorAll('[data-pay-go]').forEach(function(a){a.addEventListener('click',function(){var r=document.querySelector('input[name=paym][value='+a.getAttribute('data-pay-go')+']');if(r){r.checked=true;payLabel()}})});
 function loadRzp(){return new Promise(function(ok,no){if(window.Razorpay)return ok();var s=document.createElement('script');s.src='https://checkout.razorpay.com/v1/checkout.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
@@ -29,13 +29,13 @@ if(!/^[6-9]\d{9}$/.test(ph)){err.textContent='Please enter a 10-digit mobile num
 if(g('address').length<10){err.textContent='Please enter your full address.';return}err.textContent='';
 var p=C.packs.filter(function(x){return x.id===g('pack')})[0],how=paym();
 var data={ref:f.dataset.ref,pack:p.id,name:g('name'),phone:ph,address:g('address'),city:g('city'),pin:g('pin'),website:g('website')};
-var msg=function(ref,paidNote){return 'New order'+(ref?' '+ref:'')+'\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(how==='online'?p.price-C.off:p.price)+' (free delivery)\nPayment: '+(paidNote||'Cash on Delivery')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin')};
+var msg=function(ref,paidNote){return 'New order'+(ref?' '+ref:'')+'\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(how==='online'?p.price-C.off:p.price+C.cod)+(how==='online'?' (free delivery)':' (incl. '+rs(C.cod)+' COD charge)')+'\nPayment: '+(paidNote||'Cash on Delivery')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin')};
 var go=$('#oGo');go.disabled=true;go.textContent=how==='online'?'Opening secure payment…':'Placing your order…';
 if(!f.dataset.ref)f.dataset.ref='CX'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();data.ref=f.dataset.ref;
 var reset=function(){go.disabled=false;payLabel()};
 var show=function(html){var d=$('#oDone');d.innerHTML=html;d.hidden=false;d.scrollIntoView({behavior:'smooth',block:'center'})};
 var waBtn=function(t,label){return '<a class="btn wa block" target="_blank" rel="noopener" href="https://wa.me/'+C.wa+'?text='+encodeURIComponent(t)+'">'+label+'</a>'};
-var placed=function(ref,paid){f.hidden=true;show('<h3>'+(paid?'Payment received ✅':'Order placed ✅')+'</h3><p>Order number <b>'+ref+'</b><br>'+p.label+' · '+rs(paid?p.price-C.off:p.price)+' · '+(paid?'Paid online':'Cash on Delivery')+'</p><p class="muted">'+(paid?'Prepaid orders are packed first. ':'')+'We will confirm on WhatsApp and share tracking when it ships.</p>'+waBtn('Hi, I just placed order '+ref+' on your website. Please confirm.','Get updates on WhatsApp'))};
+var placed=function(ref,paid){f.hidden=true;show('<h3>'+(paid?'Payment received ✅':'Order placed ✅')+'</h3><p>Order number <b>'+ref+'</b><br>'+p.label+' · '+rs(paid?p.price-C.off:p.price+C.cod)+' · '+(paid?'Paid online':'Cash on Delivery (incl. '+rs(C.cod)+' COD charge)')+'</p><p class="muted">'+(paid?'Prepaid orders are packed first. ':'')+'We will confirm on WhatsApp and share tracking when it ships.</p>'+waBtn('Hi, I just placed order '+ref+' on your website. Please confirm.','Get updates on WhatsApp'))};
 if(how==='cod'){post('/api/order',data).then(function(j){if(j._ok&&j.ok)placed(j.ref||data.ref,false);else if(j.error==='cod_unavailable'){var on=document.querySelector('input[name=paym][value=online]');if(on)on.checked=true;reset();show('<h3>Cash on Delivery is not available for pincode '+g('pin')+'</h3><p>Please pay online instead. You also get <b>'+rs(C.off)+' off</b>. Tap <b>Pay</b> below.</p>')}else{reset();show('<h3>One more step</h3><p>We could not save your order automatically. Tap below to send it on WhatsApp; it is ready to send.</p>'+waBtn(msg(data.ref),'Send order on WhatsApp'))}}).catch(function(){reset();show('<h3>One more step</h3><p>No connection. Tap below to send your order on WhatsApp.</p>'+waBtn(msg(data.ref),'Send order on WhatsApp'))});return}
 // online
 Promise.all([post('/api/create-order',data),loadRzp()]).then(function(x){var o=x[0];

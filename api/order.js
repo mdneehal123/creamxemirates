@@ -14,6 +14,7 @@ module.exports = async (req, res) => {
   const pack = D.packById(b.pack), c = D.customer(b);
   if (!pack || !c) return res.status(400).json({ ok: false, error: 'invalid_details' });
   const ref = D.newRef(b.ref);
+  const total = pack.price + (D.CFG.codFee || 0); // pack price + COD charge
 
   let booked = null, warn = '';
   if (delhiveryOn()) {
@@ -24,17 +25,17 @@ module.exports = async (req, res) => {
     }
     if (!s) warn = '⚠ Delhivery pincode check did not answer. ';
     if (s && s.state && !c.state) c.state = s.state;
-    booked = await bookCod({ ref, c, pack, product: D.CFG.product + ' ' + D.CFG.size });
+    booked = await bookCod({ ref, c, pack, total, product: D.CFG.product + ' ' + D.CFG.size });
     if (!booked.ok) warn += '⚠ Delhivery booking failed (' + booked.error + '): book it in Delhivery manually. ';
   } else {
     warn = '⚠ Delhivery not connected on the website: book this COD order in Delhivery manually. ';
   }
   const ok = booked && booked.ok;
-  const r = await D.push({ ref, c, pack, total: pack.price, paid: false, courier: ok ? 'Delhivery' : '', awb: ok ? booked.awb : '',
-    note: (ok ? 'COD booked with Delhivery · AWB ' + booked.awb + ' · print the label from the Delhivery panel. ' : '') + warn + 'Collect ₹' + pack.price + ' · ' + pack.label });
-  if (r.ok) return res.status(200).json({ ok: true, ref, total: pack.price, awb: ok ? booked.awb : '' });
+  const r = await D.push({ ref, c, pack, total, paid: false, courier: ok ? 'Delhivery' : '', awb: ok ? booked.awb : '',
+    note: (ok ? 'COD booked with Delhivery · AWB ' + booked.awb + ' · print the label from the Delhivery panel. ' : '') + warn + 'Collect ₹' + total + (D.CFG.codFee ? ' (incl. ₹' + D.CFG.codFee + ' COD charge)' : '') + ' · ' + pack.label });
+  if (r.ok) return res.status(200).json({ ok: true, ref, total, awb: ok ? booked.awb : '' });
   // Not saved in the desk. If Delhivery booked it, the parcel exists (AWB): tell the customer it is placed, and log loudly.
   console.error('COD ORDER NOT SAVED TO DESK', ref, r.error, JSON.stringify({ name: c.name, phone: c.phone, address: c.address, pin: c.pin, pack: pack.id, awb: ok ? booked.awb : '' }));
-  if (ok) return res.status(200).json({ ok: true, ref, total: pack.price, awb: booked.awb });
+  if (ok) return res.status(200).json({ ok: true, ref, total, awb: booked.awb });
   return res.status(502).json({ ok: false, error: 'not_saved', ref });
 };

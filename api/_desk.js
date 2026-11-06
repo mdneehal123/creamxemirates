@@ -26,7 +26,7 @@ async function push({ ref, c, pack, total, paid, payId, note, courier, awb }) {
   if (!key) return { ok: false, error: 'WEB_ORDER_KEY not set' };
   const body = {
     ref, src: 'web', site: CFG.site, brand: 'cx', pay: paid ? 'upi' : 'cod', paid: Boolean(paid), payId: payId || '',
-    total, sub: pack.price, disc: pack.price - total, coupon: '', courier: courier || '', awb: awb || '', note: note || '',
+    total, sub: pack.price, disc: Math.max(0, pack.price - total), coupon: '', courier: courier || '', awb: awb || '', note: note || '',
     name: c.name, phone: c.phone, email: '', house: c.address, area: c.city, landmark: '', pin: c.pin, city: c.city, state: c.state || '',
     items: [[pack.desk, CFG.product + ' ' + CFG.size + (pack.jars > 1 ? ' x ' + pack.jars : ''), 1, pack.price]]
   };

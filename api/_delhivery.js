@@ -39,11 +39,11 @@ async function serviceable(pin) {
 }
 
 // Books one COD shipment for a pack. Returns { ok, awb } or { ok:false, error }.
-async function bookCod({ ref, c, pack, product }) {
+async function bookCod({ ref, c, pack, total, product }) {
   const jars = pack.jars;
   const shipment = {
     name: c.name, add: c.address, pin: c.pin, city: c.city, state: c.state || stateFor(c.pin), country: 'India', phone: c.phone, order: ref,
-    payment_mode: 'COD', cod_amount: String(pack.price), total_amount: String(pack.price),
+    payment_mode: 'COD', cod_amount: String(total), total_amount: String(total),
     products_desc: (product + (jars > 1 ? ' x' + jars : '')).slice(0, 200), quantity: String(jars),
     order_date: new Date().toISOString().slice(0, 19).replace('T', ' '), weight: String(Math.round((0.13 * jars + 0.05) * 1000)),
     shipment_length: String(jars > 1 ? 15 : 10), shipment_width: String(jars > 1 ? 12 : 10), shipment_height: '8',
