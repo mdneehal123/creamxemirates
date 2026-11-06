@@ -31,4 +31,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://trycreamxemirates.com/sitemap.xml
+Sitemap: https://trycreamxemirates.in/sitemap.xml

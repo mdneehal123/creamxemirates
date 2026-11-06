@@ -5,7 +5,7 @@ import os, json, html, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ---------------- CONFIG: change these ----------------
-SITE = 'https://trycreamxemirates.com'   # the live domain
+SITE = 'https://trycreamxemirates.in'    # the live domain
 STORE = 'Beauty Mart'                    # the seller's store name shown on the site
 OWNER = 'Beauty Mart Pvt Ltd'
 ADDR = 'Azad Nagar 4th Cross, near Anfa Park, Bhatkal, Uttara Kannada, Karnataka 581320, India'

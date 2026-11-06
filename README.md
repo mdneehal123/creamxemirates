@@ -1,4 +1,4 @@
-# Cream X Emirates online store (trycreamxemirates.com)
+# Cream X Emirates online store (trycreamxemirates.in)
 
 Static site + 4 Vercel functions. Independent seller store for CXE Glow Restoring Face Crème 30 ml.
 
@@ -15,7 +15,7 @@ Static site + 4 Vercel functions. Independent seller store for CXE Glow Restorin
 | `RAZORPAY_WEBHOOK_SECRET` | Secret you type when adding the webhook below |
 | `WEB_ORDER_KEY` | Same value as in the GlutaNex Vercel project (sends orders to the Order Desk) |
 
-Razorpay webhook: Dashboard > Webhooks > Add: URL `https://trycreamxemirates.com/api/razorpay-webhook`, event `payment.captured`.
+Razorpay webhook: Dashboard > Webhooks > Add: URL `https://trycreamxemirates.in/api/razorpay-webhook`, event `payment.captured`.
 
 ## Order flow
 - Pay online: `/api/create-order` → Razorpay checkout → `/api/verify` (and the webhook as backup) → Order Desk as PAID.
