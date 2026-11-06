@@ -22,7 +22,15 @@ var ph=g('phone').replace(/\D/g,'').replace(/^91(?=\d{10}$)/,'');if(g('name').le
 if(!/^[6-9]\d{9}$/.test(ph)){err.textContent='Please enter a 10-digit mobile number.';return}if(!/^\d{6}$/.test(g('pin'))){err.textContent='Please enter a 6-digit pincode.';return}
 if(g('address').length<10){err.textContent='Please enter your full address.';return}err.textContent='';
 var p=C.packs.filter(function(x){return x.id===g('pack')})[0];
-wa('New order\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(p.price)+' (free delivery)\nPayment: '+g('pay')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin'))})}
+var msg=function(ref){return 'New order'+(ref?' '+ref:'')+'\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(p.price)+' (free delivery)\nPayment: '+g('pay')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin')};
+var go=$('#oGo');go.disabled=true;go.textContent='Placing your order…';
+if(!f.dataset.ref)f.dataset.ref='CX'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
+var done=function(ok,ref){var d=$('#oDone');var link='https://wa.me/'+C.wa+'?text='+encodeURIComponent(ok?'Hi, I just placed order '+ref+' on your website. Please confirm.':msg(ref));
+d.innerHTML=ok?'<h3>Order placed ✅</h3><p>Order number <b>'+ref+'</b><br>'+p.label+' · '+rs(p.price)+' · Cash on Delivery</p><p class="muted">We will confirm on WhatsApp and share tracking when it ships.</p><a class="btn wa block" target="_blank" rel="noopener" href="'+link+'">Get updates on WhatsApp</a>'
+:'<h3>One more step</h3><p>We could not save your order automatically. Tap below to send it to us on WhatsApp; it is ready to send.</p><a class="btn wa block" target="_blank" rel="noopener" href="'+link+'">Send order on WhatsApp</a>';
+d.hidden=false;if(ok){f.hidden=true}else{go.disabled=false;go.textContent='Place order · Cash on Delivery'}d.scrollIntoView({behavior:'smooth',block:'center'})};
+fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref:f.dataset.ref,pack:p.id,name:g('name'),phone:ph,address:g('address'),city:g('city'),pin:g('pin'),pay:g('pay'),website:g('website')})})
+.then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok,j:j}})}).then(function(x){done(x.ok,x.j.ref||f.dataset.ref)}).catch(function(){done(false,f.dataset.ref)})})}
 // sticky bar after scrolling past the buy buttons
 var s=$('.sticky'),c=$('.ctas');if(s&&c&&'IntersectionObserver' in window){new IntersectionObserver(function(e){s.classList.toggle('show',!e[0].isIntersecting&&e[0].boundingClientRect.top<0)}).observe(c)}
 // review form

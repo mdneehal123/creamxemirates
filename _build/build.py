@@ -113,7 +113,15 @@ var ph=g('phone').replace(/\D/g,'').replace(/^91(?=\d{10}$)/,'');if(g('name').le
 if(!/^[6-9]\d{9}$/.test(ph)){err.textContent='Please enter a 10-digit mobile number.';return}if(!/^\d{6}$/.test(g('pin'))){err.textContent='Please enter a 6-digit pincode.';return}
 if(g('address').length<10){err.textContent='Please enter your full address.';return}err.textContent='';
 var p=C.packs.filter(function(x){return x.id===g('pack')})[0];
-wa('New order\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(p.price)+' (free delivery)\nPayment: '+g('pay')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin'))})}
+var msg=function(ref){return 'New order'+(ref?' '+ref:'')+'\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(p.price)+' (free delivery)\nPayment: '+g('pay')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin')};
+var go=$('#oGo');go.disabled=true;go.textContent='Placing your order…';
+if(!f.dataset.ref)f.dataset.ref='CX'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
+var done=function(ok,ref){var d=$('#oDone');var link='https://wa.me/'+C.wa+'?text='+encodeURIComponent(ok?'Hi, I just placed order '+ref+' on your website. Please confirm.':msg(ref));
+d.innerHTML=ok?'<h3>Order placed ✅</h3><p>Order number <b>'+ref+'</b><br>'+p.label+' · '+rs(p.price)+' · Cash on Delivery</p><p class="muted">We will confirm on WhatsApp and share tracking when it ships.</p><a class="btn wa block" target="_blank" rel="noopener" href="'+link+'">Get updates on WhatsApp</a>'
+:'<h3>One more step</h3><p>We could not save your order automatically. Tap below to send it to us on WhatsApp; it is ready to send.</p><a class="btn wa block" target="_blank" rel="noopener" href="'+link+'">Send order on WhatsApp</a>';
+d.hidden=false;if(ok){f.hidden=true}else{go.disabled=false;go.textContent='Place order · Cash on Delivery'}d.scrollIntoView({behavior:'smooth',block:'center'})};
+fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref:f.dataset.ref,pack:p.id,name:g('name'),phone:ph,address:g('address'),city:g('city'),pin:g('pin'),pay:g('pay'),website:g('website')})})
+.then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok,j:j}})}).then(function(x){done(x.ok,x.j.ref||f.dataset.ref)}).catch(function(){done(false,f.dataset.ref)})})}
 // sticky bar after scrolling past the buy buttons
 var s=$('.sticky'),c=$('.ctas');if(s&&c&&'IntersectionObserver' in window){new IntersectionObserver(function(e){s.classList.toggle('show',!e[0].isIntersecting&&e[0].boundingClientRect.top<0)}).observe(c)}
 // review form
@@ -210,14 +218,14 @@ def product_body(h1_tag='h1'):
 <li><b>Wait, then layer.</b> After about 10 minutes, apply a second thin layer like a night mask and leave it on overnight.</li>
 <li><b>Rinse in the morning.</b> Wash off with cold water, then apply SPF 30+ sunscreen. Use nightly.</li></ol>
 <p class="note"><b>Not recommended</b> for children under 14, during pregnancy or breastfeeding, or for elderly users, unless a doctor approves. Do not apply on broken, sunburnt or irritated skin. Stop if you get burning, swelling or a rash, and see a doctor.</p></div></section>
-<section class="band alt" id="order"><div class="wrap grid2"><div><h2>Order with Cash on Delivery</h2><p>Fill in your details and tap the button. Your order opens in WhatsApp, ready to send. We confirm it on WhatsApp and share tracking once it ships.</p>
+<section class="band alt" id="order"><div class="wrap grid2"><div><h2>Order with Cash on Delivery</h2><p>Fill in your details and tap the button. Your order is placed straight away, and we confirm it on WhatsApp and share tracking once it ships.</p>
 <p class="muted">No advance payment. Pay in cash when the parcel arrives.</p></div>
 <form class="order" id="orderForm" novalidate><label>Pack<select name="pack" id="oPack">%s</select></label>
 <label>Full name<input name="name" autocomplete="name" required></label><label>Mobile number<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" required placeholder="10-digit number"></label>
 <label>Full address<textarea name="address" rows="3" autocomplete="street-address" required placeholder="House no., street, area, landmark"></textarea></label>
 <div class="two"><label>City<input name="city" autocomplete="address-level2"></label><label>Pincode<input name="pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" required></label></div>
 <label>Payment<select name="pay"><option>Cash on Delivery</option><option>UPI (send payment link on WhatsApp)</option></select></label>
-<p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit">Place order on WhatsApp</button></form></div></section>
+<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit" id="oGo">Place order · Cash on Delivery</button></form><div id="oDone" class="card" hidden></div></div></section>
 <section class="band"><div class="wrap"><h2>Reviews</h2><p>No reviews yet. Bought from us? <a href="/review/">Share an honest review</a>; we publish real reviews only, with the customer's permission.</p></div></section>
 <section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>Cream X Emirates face cream</td></tr><tr><td>Size</td><td>30 g jar</td></tr><tr><td>Price</td><td>@@P1@@ (MRP @@MRP@@)</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
 <section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
@@ -230,6 +238,8 @@ def simple(path, title, desc, h1, inner, schema=None):
 
 def build():
     os.makedirs(os.path.join(ROOT, 'assets'), exist_ok=True)
+    os.makedirs(os.path.join(ROOT, 'api'), exist_ok=True)
+    open(os.path.join(ROOT, 'api/_packs.json'), 'w').write(json.dumps({'site': SITE.split('//')[-1], 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'desk': 'cx%d' % (n + 1)} for n, (i, l, j, p) in enumerate(PACKS)]}, ensure_ascii=False, indent=1))
     open(os.path.join(ROOT, 'assets/site.css'), 'w').write(CSS)
     open(os.path.join(ROOT, 'assets/site.js'), 'w').write(JS)
     open(os.path.join(ROOT, 'assets/jar.svg'), 'w').write(JAR)

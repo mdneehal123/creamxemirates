@@ -1,0 +1,28 @@
+{
+ "site": "your-domain.in",
+ "product": "Cream X Emirates Face Cream",
+ "size": "30 g",
+ "packs": [
+  {
+   "id": "p1",
+   "label": "1 jar",
+   "jars": 1,
+   "price": 799,
+   "desk": "cx1"
+  },
+  {
+   "id": "p2",
+   "label": "2 jars",
+   "jars": 2,
+   "price": 1499,
+   "desk": "cx2"
+  },
+  {
+   "id": "p3",
+   "label": "3 jars",
+   "jars": 3,
+   "price": 2099,
+   "desk": "cx3"
+  }
+ ]
+}
