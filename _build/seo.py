@@ -5,7 +5,7 @@ import html
 
 UPDATED = '2026-11-06'
 
-def guides(P, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, OFF=50, CODF=100):
+def guides(P, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, OFF=50, CODF=100, B_CMP={}):
     p1, p2, po = PACKS[0][3], PACKS[1][3], PACKS[2][3]
     G = []
 
@@ -18,7 +18,7 @@ def guides(P, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, OFF=50, CODF=100):
 <h2>Old white jar or new pink jar?</h2><p>The brand changed its packaging from a white jar to a pink CXE jar and says the formula is the same. We still have some old white jars, sold at a lower clearance price until they run out. Check the expiry date printed on either pack. Read <a href="/original-cream-x-emirates/">old vs new packaging</a>.</p>
 <h2>What is included</h2><ul><li>Sealed 30 ml jar(s), new stock</li><li>Free delivery anywhere we ship in India</li><li>Pay online (UPI, cards, net banking) or Cash on Delivery</li><li>7-day return on sealed, unused packs</li></ul>
 <h2>Why prices differ between sellers</h2><p>The MRP printed on the pack is the maximum anyone can charge, and sellers may sell below it. A price far below others is a warning sign: very cheap jars may be expired, refilled or fake. Read <a href="/original-cream-x-emirates/">how to check an original pack</a>.</p>
-<h2>How long one jar lasts</h2><p>With the brand's night routine (a small amount, then a thin overnight layer), one 30 ml jar usually lasts around 4 to 6 weeks of nightly use. Visible change takes 8 to 12 weeks, so the pack of 2 is better value if you plan to continue.</p>''' % ''.join('<tr><td>%s</td><td>%s</td><td><b>%s</b></td><td>%s</td><td>%s</td></tr>' % (l, ('<s>%s</s>' % rs(2200 * j)) if i != 'o1' else '–', rs(p), rs(p - OFF), rs(p + CODF)) for i, l, j, p in PACKS),
+<h2>How long one jar lasts</h2><p>With the brand's night routine (a small amount, then a thin overnight layer), one 30 ml jar usually lasts around 4 to 6 weeks of nightly use. Visible change takes 8 to 12 weeks, so the pack of 2 is better value if you plan to continue.</p>''' % ''.join('<tr><td>%s</td><td>%s</td><td><b>%s</b></td><td>%s</td><td>%s</td></tr>' % (l, '<s>%s</s>' % rs(B_CMP.get(i) or 0), rs(p), rs(p - OFF), rs(p + CODF)) for i, l, j, p in PACKS),
         faq=[('What is the price of Cream X Emirates 30 ml?', 'The MRP is ₹2,200. Here it is %s for one new jar, %s for two, or %s for the old white jar while stock lasts.' % (rs(p1), rs(p2), rs(po))),
              ('Is Cash on Delivery available?', 'Yes, with a %s COD charge. Paying online is cheaper: %s off.' % (rs(CODF), rs(OFF))),
              ('Is the old jar the same cream?', 'The brand says the formula is the same; only the packaging changed. Check the expiry date on the pack.')]))
@@ -130,7 +130,7 @@ def build_all(B, sch, title, desc):
     """Write home (with guides + hreflang), guides, local pages, hub, llms.txt, feed, 404. B = build module globals."""
     rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, SITE, OWNER, ADDR, JAR = (B[k] for k in ('rs', 'MRP', 'PACKS', 'PRODUCT', 'SIZE', 'WA', 'WA_SHOW', 'SITE', 'OWNER', 'ADDR', 'JAR'))
     layout, write, faq_html, faq_ld, simple, product_body, ROOT, os = (B[k] for k in ('layout', 'write', 'faq_html', 'faq_ld', 'simple', 'product_body', 'ROOT', 'os'))
-    G = guides(None, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, B['PREPAID_OFF'], B['COD_FEE'])
+    G = guides(None, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, B['PREPAID_OFF'], B['COD_FEE'], {k: v['cmp'] for k, v in B['PACK_INFO'].items()})
     L = local_pages(rs, PACKS, MRP)
     p1 = PACKS[0][3]
     short = lambda g: g['title'].split(':')[0]
