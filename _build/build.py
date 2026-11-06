@@ -24,7 +24,7 @@ PACKS = [  # (id, label, jars, price): the options on the page, in order
     ('o1', '1 old white jar', 1, 749),
 ]
 TEST_PACK = ('t1', 'TEST ORDER ₹1 (do not ship)', 1, 1)   # secret test page only; set TEST_SLUG = '' to remove
-TEST_SLUG = 'test-order-2b9ed7'
+TEST_SLUG = ''
 PACK_INFO = {  # line under each option, badge, photo shown when chosen (index in the gallery), compare-at price (crossed out; None = none)
     'p1': {'sub': 'New CXE pink pack · MRP ₹2,200', 'tag': '50% off', 'img': 1, 'cmp': 2200},
     'p2': {'sub': '₹925 per jar · MRP ₹4,400', 'tag': 'Best value', 'img': 3, 'cmp': 4400},
