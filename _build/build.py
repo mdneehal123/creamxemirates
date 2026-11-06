@@ -5,7 +5,7 @@ import os, json, html, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ---------------- CONFIG: change these ----------------
-SITE = 'https://your-domain.in'          # TODO: set the real domain
+SITE = 'https://trycreamxemirates.com'   # the live domain
 STORE = 'Beauty Mart'                    # the seller's store name shown on the site
 OWNER = 'Beauty Mart Pvt Ltd'
 ADDR = 'Azad Nagar 4th Cross, near Anfa Park, Bhatkal, Uttara Kannada, Karnataka 581320, India'
@@ -82,6 +82,10 @@ footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-
 .sticky .p{flex:1;line-height:1.2}.sticky .p b{display:block;font-size:1.1rem}.sticky .p s{font-size:.8rem;color:var(--muted)}@media(max-width:860px){.sticky.show{display:flex}}
 .prose{max-width:760px}.prose ul{padding-left:1.2em}
 .pack .l .tag{color:#fff}
+.wa-float{position:fixed;right:16px;bottom:20px;z-index:40;display:flex;align-items:center;gap:8px;background:#25d366;color:#fff;text-decoration:none;border-radius:999px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);font:600 .9rem system-ui;animation:waring 2.4s ease-out infinite}
+.wa-float span{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .3s}.wa-float:hover span,.wa-float:focus span{max-width:140px;padding-right:4px}
+@keyframes waring{0%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 14px rgba(37,211,102,0)}100%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 0 rgba(37,211,102,0)}}
+@media(max-width:860px){.wa-float{bottom:86px;right:12px;padding:11px}}
 /* attention animations: gentle, and off for people who ask for less motion */
 @keyframes shine{0%{transform:translateX(-120%) skewX(-20deg)}55%,100%{transform:translateX(260%) skewX(-20deg)}}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
@@ -192,10 +196,11 @@ def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en
 <div><b>Shop</b><p><a href="/%s">%s</a><br><a href="/#order">Order on COD</a><br><a href="/review/">Write a review</a></p></div>
 <div><b>Help</b><p><a href="/guides/">Guides</a><br><a href="/faq/">FAQ</a><br><a href="/shipping-policy/">Shipping</a><br><a href="/refund-policy/">Returns and refunds</a><br><a href="/privacy-policy/">Privacy</a><br><a href="/terms/">Terms</a><br><a href="/contact/">Contact</a></p></div></div>
 <p class="disc">Cream X Emirates is a trademark of its owner. This website is run by %s, an independent seller, and is not the official brand website. Product information is general cosmetic guidance, not medical advice; results vary from person to person.<br>© %d %s</p></div></footer>
+<a class="wa-float" href="https://wa.me/%s?text=%s" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path fill="#fff" d="M16 3C9 3 3.3 8.6 3.3 15.6c0 2.5.7 4.8 1.9 6.8L3 29l6.8-2.1c1.9 1 4 1.6 6.2 1.6 7 0 12.7-5.6 12.7-12.6S23 3 16 3zm0 23.1c-2 0-3.9-.6-5.6-1.6l-.4-.2-4 1.2 1.3-3.9-.3-.4c-1.1-1.7-1.7-3.6-1.7-5.6C5.3 9.9 10.1 5.2 16 5.2s10.7 4.7 10.7 10.5S21.9 26.1 16 26.1zm5.9-7.8c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.4c.2.2 2.4 3.7 5.8 5.1.8.4 1.4.6 1.9.7.8.3 1.6.2 2.2.1.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg><span>Chat with us</span></a>
 <script>window.STORE=%s</script><script src="/assets/site.js" defer></script></body></html>''' % (
         lang, html.escape(title), html.escape(desc), can, robots, html.escape(title), html.escape(desc), can, SITE, ld, extra,
         WA, body, html.escape(OWNER), html.escape(STORE), html.escape(ADDR), WA, WA_SHOW,
-        (' · <a href="mailto:%s">%s</a>' % (EMAIL, EMAIL)) if EMAIL else '', '', html.escape(PRODUCT), html.escape(OWNER), datetime.date.today().year, html.escape(OWNER), cfg)).replace('@@TOPBAR@@', ('Extra %s off when you pay online · Free delivery across India' % rs(PREPAID_OFF)) if PREPAID_OFF else 'Free delivery across India · Pay online or Cash on Delivery')
+        (' · <a href="mailto:%s">%s</a>' % (EMAIL, EMAIL)) if EMAIL else '', '', html.escape(PRODUCT), html.escape(OWNER), datetime.date.today().year, html.escape(OWNER), WA, __import__('urllib.parse').parse.quote('Hi, I have a question about %s (%s).' % (PRODUCT, SIZE)), cfg)).replace('@@TOPBAR@@', ('Extra %s off when you pay online · Free delivery across India' % rs(PREPAID_OFF)) if PREPAID_OFF else 'Free delivery across India · Pay online or Cash on Delivery')
 
 def write(path, doc):
     d = os.path.join(ROOT, path.strip('/'))
