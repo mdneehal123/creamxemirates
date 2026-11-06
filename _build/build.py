@@ -88,7 +88,7 @@ footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-
 .sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;display:none;align-items:center;gap:12px;z-index:30;box-shadow:0 -6px 20px rgba(0,0,0,.06)}
 .sticky .p{flex:1;line-height:1.2}.sticky .p b{display:block;font-size:1.1rem}.sticky .p s{font-size:.8rem;color:var(--muted)}@media(max-width:860px){.sticky.show{display:flex}}
 .prose{max-width:760px}.prose ul{padding-left:1.2em}
-.pack .l .tag{color:#fff}
+.pack .l .tag{color:#fff}[hidden]{display:none!important}
 .wa-float{position:fixed;right:16px;bottom:20px;z-index:40;display:flex;align-items:center;gap:8px;background:#25d366;color:#fff;text-decoration:none;border-radius:999px;padding:12px;box-shadow:0 6px 18px rgba(0,0,0,.18);font:600 .9rem system-ui;animation:waring 2.4s ease-out infinite}
 .wa-float span{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .3s}.wa-float:hover span,.wa-float:focus span{max-width:140px;padding-right:4px}
 @keyframes waring{0%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 14px rgba(37,211,102,0)}100%{box-shadow:0 6px 18px rgba(0,0,0,.18),0 0 0 0 rgba(37,211,102,0)}}
