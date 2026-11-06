@@ -12,13 +12,13 @@ ADDR = 'Azad Nagar 4th Cross, near Anfa Park, Bhatkal, Uttara Kannada, Karnataka
 WA = '919980881230'                      # TODO: confirm the WhatsApp order number
 WA_SHOW = '+91 99808 81230'
 EMAIL = ''                               # optional support email
-PRODUCT = 'Cream X Emirates Face Cream'
-SIZE = '30 g'
-MRP = 849                                # TODO: confirm
+PRODUCT = 'Cream X Emirates Glow Restoring Face Crème'
+SIZE = '30 ml'
+MRP = 949                                # TODO: confirm
 PACKS = [  # (id, label, jars, price) -- TODO: confirm prices
-    ('p1', '1 jar', 1, 799),
-    ('p2', '2 jars', 2, 1499),
-    ('p3', '3 jars', 3, 2099),
+    ('p1', '1 jar', 1, 899),
+    ('p2', '2 jars', 2, 1699),
+    ('p3', '3 jars', 3, 2399),
 ]
 # ------------------------------------------------------
 
@@ -51,7 +51,7 @@ nav a{color:var(--ink);text-decoration:none;font-size:.92rem;margin-left:16px}na
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 1rem system-ui;text-decoration:none;cursor:pointer}
 .btn:hover{background:var(--rose-d)}.btn.wa{background:#1f8f55}.btn.wa:hover{background:#18744a}.btn.ghost{background:#fff;color:var(--rose-d);border:1.5px solid var(--rose)}.btn.block{width:100%}
 .pdp{display:grid;grid-template-columns:1.05fr 1fr;gap:34px;padding:26px 0 10px}@media(max-width:860px){.pdp{grid-template-columns:1fr;gap:18px;padding-top:14px}}
-.gal-main{border-radius:22px;overflow:hidden;background:#fbe9ef;border:1px solid var(--line)}.gal-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.gal-main{border-radius:22px;overflow:hidden;background:#fbe9ef;border:1px solid var(--line)}.gal-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.gal-main img,.gal-thumbs img{width:100%;height:100%;object-fit:cover;display:block}
 .gal-thumbs button{border:1.5px solid var(--line);border-radius:14px;padding:0;background:#fff;overflow:hidden;cursor:pointer;aspect-ratio:1}.gal-thumbs button[aria-current=true]{border-color:var(--rose)}
 .tile{display:flex;align-items:center;justify-content:center;text-align:center;height:100%;padding:10px;font-size:.8rem;color:var(--rose-d);background:var(--blush)}
 .crumb{font-size:.82rem;color:var(--muted);margin:14px 0 0}.crumb a{color:var(--muted)}
@@ -82,11 +82,11 @@ footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-
 .prose{max-width:760px}.prose ul{padding-left:1.2em}
 .pack .l .tag{color:#fff}.glist{list-style:none;padding:0;margin:0}.glist li{border-bottom:1px solid var(--line)}.glist a{display:block;padding:12px 0;text-decoration:none;font-weight:600}.glist a:after{content:' ›';color:var(--rose)}
 .answer{background:#fff;border:1px solid var(--line);border-left:5px solid var(--rose);border-radius:12px;padding:14px 16px;font-size:1.05rem}.answer:before{content:'Quick answer';display:block;font:700 .72rem system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--rose-d);margin-bottom:4px}
-.pcard{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin:22px 0}.pcard svg{width:84px;height:84px;border-radius:12px;flex:none}.pcard .t{flex:1}.pcard b{display:block}.pcard .btn{padding:10px 16px;font-size:.92rem}
+.pcard{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin:22px 0}.pcard svg,.pcard img{width:84px;height:84px;border-radius:12px;flex:none;object-fit:cover}.pcard .t{flex:1}.pcard b{display:block}.pcard .btn{padding:10px 16px;font-size:.92rem}
 .tbl{overflow-x:auto}.spec th{text-align:left;font-size:.85rem;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}.meta{font-size:.82rem;color:var(--muted)}.feat{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}@media(max-width:860px){.feat{grid-template-columns:1fr 1fr}}@media(max-width:480px){.feat{grid-template-columns:1fr}}.feat p{margin:.4em 0 0;font-size:.92rem;color:var(--muted)}
 .tl{list-style:none;padding:0;margin:0;border-left:3px solid var(--rose)}.tl li{padding:0 0 16px 18px;position:relative}.tl li:before{content:'';position:absolute;left:-8px;top:6px;width:13px;height:13px;border-radius:50%;background:var(--rose)}.tl b{display:block}.tl span{color:var(--muted);font-size:.93rem}
 .spec{width:100%;border-collapse:collapse;font-size:.92rem}.spec td{padding:8px 0;border-bottom:1px solid var(--line);vertical-align:top}.spec td:first-child{color:var(--muted);width:40%}.gal-thumbs .tile span{display:none}.gal-thumbs .tile b{font-size:1rem!important}
-@media(max-width:860px){.gal-main{aspect-ratio:16/11;display:flex;justify-content:center;align-items:center}.gal-main>svg{height:100%;width:auto}.gal-main>.tile{width:100%}.gal-thumbs{grid-template-columns:repeat(3,72px)}}
+@media(max-width:860px){.gal-main{aspect-ratio:1;display:flex;justify-content:center;align-items:center}.gal-main>.tile{width:100%}.gal-thumbs{grid-template-columns:repeat(4,1fr)}}
 '''
 
 JS = r'''(function(){
@@ -149,7 +149,7 @@ def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en
 <meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
 <meta name="theme-color" content="#8a2d52"><meta property="og:locale" content="en_IN"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">%s%s</head><body>
 <div class="top">Free delivery across India · Cash on Delivery available</div>
-<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 g · Cash on Delivery across India</small></a>
+<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 ml · Cash on Delivery across India</small></a>
 <nav><a class="hide-m" href="/#how-to-use">How to use</a><a class="hide-m" href="/guides/">Guides</a><a class="hide-m" href="/faq/">FAQ</a><a class="hide-m" href="/review/">Reviews</a><a href="https://wa.me/%s" rel="noopener">WhatsApp</a></nav></div></header>
 <main>%s</main>
 <footer><div class="wrap"><div class="cols"><div><b>%s</b><p>%s<br>%s</p><p>WhatsApp: <a href="https://wa.me/%s">%s</a>%s</p></div>
@@ -175,12 +175,15 @@ def faq_ld(items):
 def product_ld():
     p1 = PACKS[0]
     return {'@context': 'https://schema.org', '@type': 'Product', 'name': '%s %s' % (PRODUCT, SIZE), 'brand': {'@type': 'Brand', 'name': 'Cream X Emirates'},
-            'description': 'Cream X Emirates face cream, %s, sold by %s, an independent seller in India.' % (SIZE, OWNER), 'image': [SITE + '/assets/og.png'], 'url': SITE + '/', 'sku': 'CXE-30G',
+            'description': 'Cream X Emirates (CXE) Glow Restoring Face Crème, %s: brightens, deeply hydrates, improves skin texture, nourishes and repairs. Sold by %s, an independent seller in India.' % (SIZE, OWNER), 'image': [SITE + '/assets/img/cxe-jars.jpg', SITE + '/assets/img/cxe-new-pack.jpg', SITE + '/assets/og.png'], 'url': SITE + '/', 'sku': 'CXE-30ML',
             'offers': {'@type': 'Offer', 'price': str(p1[3]), 'priceCurrency': 'INR', 'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': SITE + '/',
                        'seller': {'@type': 'Organization', 'name': OWNER},
                        'shippingDetails': {'@type': 'OfferShippingDetails', 'shippingRate': {'@type': 'MonetaryAmount', 'value': '0', 'currency': 'INR'}, 'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'IN'},
                                            'deliveryTime': {'@type': 'ShippingDeliveryTime', 'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 1, 'maxValue': 2, 'unitCode': 'DAY'}, 'transitTime': {'@type': 'QuantitativeValue', 'minValue': 2, 'maxValue': 5, 'unitCode': 'DAY'}}},
                        'hasMerchantReturnPolicy': {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'IN', 'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow', 'merchantReturnDays': 7, 'returnMethod': 'https://schema.org/ReturnByMail', 'returnFees': 'https://schema.org/FreeReturn'}}}
+
+def pic(name, alt, eager=False):
+    return '<picture><source srcset="/assets/img/%s.webp" type="image/webp"><img src="/assets/img/%s.jpg" alt="%s" width="900" height="900" %s></picture>' % (name, name, alt, 'fetchpriority="high"' if eager else 'loading="lazy"')
 
 def product_body(h1_tag='h1'):
     packs = ''.join('''<label class="pack"><input type="radio" name="pack" value="%s"%s><span class="l"><b>%s%s</b><span>%s per jar</span></span><span class="r"><b>%s</b><s>%s</s></span></label>''' % (
@@ -188,29 +191,29 @@ def product_body(h1_tag='h1'):
         rs(round(p / j)), rs(p), rs(MRP * j)) for n, (i, l, j, p) in enumerate(PACKS))
     opts = ''.join('<option value="%s">%s · %s</option>' % (i, l, rs(p)) for i, l, j, p in PACKS)
     p1 = PACKS[0]
-    tiles = [JAR, '<div class="tile"><div><b style="font-size:1.4rem">Night</b><span><br>Pea-sized amount on a clean, dry face</span></div></div>', '<div class="tile"><div><b style="font-size:1.4rem">SPF</b><span><br>Sunscreen every morning</span></div></div>']
+    tiles = [pic('cxe-jars', 'Cream X Emirates CXE Glow Restoring Face Crème 30 ml jars', True), pic('cxe-new-pack', 'New pink CXE Glow Restoring Face Crème pack'), pic('cxe-old-pack', 'Old white Cream X Emirates pack'), '<div class="tile"><div><b style="font-size:1.4rem">Night</b><span><br>Massage in, add a thin overnight layer</span></div></div>']
     thumbs = ''.join('<button type="button" aria-label="Image %d" aria-current="%s">%s</button>' % (n + 1, 'true' if n == 0 else 'false', t) for n, t in enumerate(tiles))
     return ('''<div class="wrap"><p class="crumb"><a href="/">Home</a> › Face cream</p>
 <div class="pdp"><div><div class="gal-main">%s</div><div class="gal-thumbs">%s</div></div>
-<div><span class="seller">Night face cream · 30 g</span><%s>%s, %s</%s>
+<div><span class="seller">New pack · same formula · 30 ml</span><%s>%s, %s</%s>
 <p class="muted" style="margin:0">For a brighter, more even-looking, softer face, with a simple night routine</p>
 <div class="price"><b data-price>%s</b><s data-mrp>%s</s><span class="save" data-save>Save %s</span></div><p class="tax">MRP inclusive of all taxes · free delivery</p>
 <div class="packs" role="radiogroup" aria-label="Choose a pack">%s</div>
 <div class="ctas"><a class="btn" href="#order">Buy now · COD</a><button class="btn wa" type="button" data-wa-order>Order on WhatsApp</button></div>
 <ul class="trust"><li>💵 Cash on Delivery</li><li>🚚 Free delivery in India</li><li>🔒 Sealed, new stock</li><li>↩️ 7-day return on sealed packs</li></ul>
 <p class="eta" style="margin-bottom:6px">📦 Order today, expected delivery <b id="eta">in 3 to 7 business days</b></p><p class="muted" style="font-size:.78rem;margin:0">Sealed, new stock from an independent seller; this is not the brand's official website.</p></div></div></div>
-<section class="band alt" id="details"><div class="wrap"><h2>Why people choose it</h2><div class="feat">
-<div class="card"><b>✨ Brighter-looking skin</b><p>Made for dull, tired-looking skin; with regular night use and sunscreen, skin looks fresher and more radiant.</p></div>
-<div class="card"><b>🌗 More even-looking tone</b><p>For tan and uneven patches on the face, which look lighter gradually over 8 to 12 weeks with daily sun protection.</p></div>
-<div class="card"><b>🤍 Softer, smoother feel</b><p>A cream texture for night use, so skin feels soft and comfortable by morning.</p></div>
-<div class="card"><b>🌙 Simple night routine</b><p>Cleanse, massage in, add a thin overnight layer, rinse in the morning.</p></div></div></div></section>
+<section class="band alt" id="details"><div class="wrap"><h2>What it does</h2><p class="muted">The four benefits the brand states for the Glow Restoring Face Crème.</p><div class="feat">
+<div class="card"><b>✨ Brightens skin</b><p>For dull, tired-looking skin; with regular night use and sunscreen, the face looks fresher and more radiant.</p></div>
+<div class="card"><b>💧 Deep hydration</b><p>A rich crème that keeps skin moisturised overnight, so it feels soft and comfortable by morning.</p></div>
+<div class="card"><b>〰️ Improves skin texture</b><p>With regular use, skin feels smoother and looks more even, including tan and uneven patches over 8 to 12 weeks.</p></div>
+<div class="card"><b>🌿 Nourishes and repairs</b><p>Made to nourish the skin while you sleep, as part of a simple night routine.</p></div></div></section>
 <section class="band"><div class="wrap grid2"><div><h2>What to expect</h2><ol class="tl"><li><b>Week 1 to 2</b><span>Skin adjusts and feels softer. If it feels dry or tingly, use every other night at first.</span></li>
 <li><b>Week 3 to 4</b><span>Smoother feel and a fresher look in the morning.</span></li><li><b>Week 8 to 12</b><span>Tan and uneven patches look lighter, if you wear sunscreen every day.</span></li></ol>
 <p class="muted" style="font-size:.85rem">Results vary from person to person. A face cream does not change your natural skin colour.</p></div>
 <div class="card"><h3>Product details</h3><table class="spec"><tbody>
-<tr><td>Product</td><td>%s</td></tr><tr><td>Net quantity</td><td>%s</td></tr><tr><td>Type</td><td>Face cream, leave-on</td></tr><tr><td>When to use</td><td>Night</td></tr>
+<tr><td>Product</td><td>%s</td></tr><tr><td>Also called</td><td>CXE crème, Cream X Emirates cream</td></tr><tr><td>Net quantity</td><td>%s</td></tr><tr><td>Type</td><td>Face crème, overnight</td></tr><tr><td>When to use</td><td>Night</td></tr>
 <tr><td>Where</td><td>Face and neck; avoid eyes and lips</td></tr><tr><td>Skin type</td><td>Most adult skin; patch test first</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, breastfeeding or elderly users without a doctor's advice</td></tr>
-<tr><td>Ingredients</td><td>Full list printed on the pack</td></tr><tr><td>Packaging</td><td>Sealed jar</td></tr><tr><td>Delivery</td><td>Free across India, COD available</td></tr></tbody></table></div></div></section>
+<tr><td>Ingredients</td><td>Full list printed on the pack</td></tr><tr><td>Packaging</td><td>New pink jar (replaces the old white jar); same formula</td></tr><tr><td>Delivery</td><td>Free across India, COD available</td></tr></tbody></table></div></div></section>
 <section class="band" id="how-to-use"><div class="wrap"><h2>How to use</h2><p class="muted">Following the brand's directions, with a patch test first and sunscreen in the morning.</p><ol class="steps">
 <li><b>Patch test first.</b> Apply a little behind the ear or on the jawline and wait 24 hours.</li>
 <li><b>Cleanse.</b> Wash your face well and pat it dry.</li>
@@ -227,10 +230,10 @@ def product_body(h1_tag='h1'):
 <label>Payment<select name="pay"><option>Cash on Delivery</option><option>UPI (send payment link on WhatsApp)</option></select></label>
 <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit" id="oGo">Place order · Cash on Delivery</button></form><div id="oDone" class="card" hidden></div></div></section>
 <section class="band"><div class="wrap"><h2>Reviews</h2><p>No reviews yet. Bought from us? <a href="/review/">Share an honest review</a>; we publish real reviews only, with the customer's permission.</p></div></section>
-<section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>Cream X Emirates face cream</td></tr><tr><td>Size</td><td>30 g jar</td></tr><tr><td>Price</td><td>@@P1@@ (MRP @@MRP@@)</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
+<section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>CXE Glow Restoring Face Crème</td></tr><tr><td>Size</td><td>30 ml jar</td></tr><tr><td>Price</td><td>@@P1@@ (MRP @@MRP@@)</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
 <section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
 <div class="sticky"><div class="p"><b data-price>%s</b><s data-mrp>%s</s></div><a class="btn" href="#order">Buy now</a></div>''' % (
-        JAR, thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), rs(MRP), rs(MRP - p1[3]), packs,
+        tiles[0], thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), rs(MRP), rs(MRP - p1[3]), packs,
         html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]), rs(p1[3]), rs(MRP))).replace('@@P1@@', rs(p1[3])).replace('@@MRP@@', rs(MRP))
 
 def simple(path, title, desc, h1, inner, schema=None):
