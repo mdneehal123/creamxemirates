@@ -14,7 +14,7 @@ WA_SHOW = '+91 99808 81230'
 EMAIL = ''                               # optional support email
 PRODUCT = 'Cream X Emirates Glow Restoring Face Crème'
 SIZE = '30 ml'
-GOOGLE_VERIFY = ''                       # Search Console HTML-tag code (content="..."), if not verifying by DNS
+GOOGLE_VERIFY = 'gZksuqNnui3u2T6u5USNkFOuMB0_BedjtasRenRQqDQ'                       # Search Console HTML-tag code (content="..."), if not verifying by DNS
 BING_VERIFY = ''                         # Bing Webmaster msvalidate.01 code
 COD_FEE = 100                            # extra charge for Cash on Delivery; 0 turns it off
 PREPAID_OFF = 50                         # extra discount for paying online (Razorpay); 0 turns it off
