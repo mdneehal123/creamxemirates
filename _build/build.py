@@ -14,6 +14,7 @@ WA_SHOW = '+91 99808 81230'
 EMAIL = ''                               # optional support email
 PRODUCT = 'Cream X Emirates Glow Restoring Face Crème'
 SIZE = '30 ml'
+PREPAID_OFF = 50                         # extra discount for paying online (Razorpay); 0 turns it off
 MRP = 949                                # TODO: confirm
 PACKS = [  # (id, label, jars, price) -- TODO: confirm prices
     ('p1', '1 jar', 1, 899),
@@ -80,7 +81,10 @@ footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-
 .sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;display:none;align-items:center;gap:12px;z-index:30;box-shadow:0 -6px 20px rgba(0,0,0,.06)}
 .sticky .p{flex:1;line-height:1.2}.sticky .p b{display:block;font-size:1.1rem}.sticky .p s{font-size:.8rem;color:var(--muted)}@media(max-width:860px){.sticky.show{display:flex}}
 .prose{max-width:760px}.prose ul{padding-left:1.2em}
-.pack .l .tag{color:#fff}.glist{list-style:none;padding:0;margin:0}.glist li{border-bottom:1px solid var(--line)}.glist a{display:block;padding:12px 0;text-decoration:none;font-weight:600}.glist a:after{content:' ›';color:var(--rose)}
+.pack .l .tag{color:#fff}.online{background:#eef8f2;border:1px solid #cfe9da;border-radius:12px;padding:10px 12px;margin:0 0 6px;font-size:.95rem}.online span{color:var(--ok);font-size:.85rem;display:block}
+.linkbtn{background:none;border:0;color:var(--rose-d);text-decoration:underline;font:inherit;cursor:pointer;padding:0}
+.paysel{border:0;padding:0;margin:0;display:grid;gap:8px}.paysel legend{font-weight:600;font-size:.9rem;margin-bottom:4px}.pay{display:flex!important;grid-template-columns:none!important;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#fff;cursor:pointer}.pay input{width:18px!important;height:18px;accent-color:var(--rose)}.pay span{flex:1;font-weight:400}.pay small{display:block;color:var(--muted);font-size:.8rem}.pay:has(input:checked){border-color:var(--rose);background:#fff6f9}.pay .tag{color:#fff}
+.sticky .p small{display:block;font-size:.72rem;color:var(--ok)}.glist{list-style:none;padding:0;margin:0}.glist li{border-bottom:1px solid var(--line)}.glist a{display:block;padding:12px 0;text-decoration:none;font-weight:600}.glist a:after{content:' ›';color:var(--rose)}
 .answer{background:#fff;border:1px solid var(--line);border-left:5px solid var(--rose);border-radius:12px;padding:14px 16px;font-size:1.05rem}.answer:before{content:'Quick answer';display:block;font:700 .72rem system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--rose-d);margin-bottom:4px}
 .pcard{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin:22px 0}.pcard svg,.pcard img{width:84px;height:84px;border-radius:12px;flex:none;object-fit:cover}.pcard .t{flex:1}.pcard b{display:block}.pcard .btn{padding:10px 16px;font-size:.92rem}
 .tbl{overflow-x:auto}.spec th{text-align:left;font-size:.85rem;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}.meta{font-size:.82rem;color:var(--muted)}.feat{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}@media(max-width:860px){.feat{grid-template-columns:1fr 1fr}}@media(max-width:480px){.feat{grid-template-columns:1fr}}.feat p{margin:.4em 0 0;font-size:.92rem;color:var(--muted)}
@@ -94,7 +98,7 @@ var C=window.STORE||{};var $=function(s){return document.querySelector(s)};
 function pack(){var r=document.querySelector('input[name=pack]:checked');return C.packs.filter(function(p){return p.id===(r?r.value:'p1')})[0]}
 function rs(n){return '₹'+n.toLocaleString('en-IN')}
 function sync(){var p=pack();if(!p)return;var mrp=C.mrp*p.jars;document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=rs(p.price)});
-document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});
+document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});document.querySelectorAll('[data-online]').forEach(function(e){e.textContent=rs(p.price-C.off)});payLabel();
 var o=$('#oPack');if(o)o.value=p.id;var t=document.querySelectorAll('.gal-thumbs button');var k=p.jars===2?3:0;if(t[k]&&sync.ready){t[k].click()}sync.ready=true}
 document.querySelectorAll('input[name=pack]').forEach(function(i){i.addEventListener('change',sync)});
 var op=$('#oPack');if(op)op.addEventListener('change',function(){var r=document.querySelector('input[name=pack][value='+op.value+']');if(r){r.checked=true;sync()}});
@@ -107,21 +111,34 @@ var eta=$('#eta');if(eta){var f={weekday:'short',day:'numeric',month:'short'};et
 // WhatsApp quick order
 function wa(t){var a=document.createElement('a');a.href='https://wa.me/'+C.wa+'?text='+encodeURIComponent(t);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
 document.querySelectorAll('[data-wa-order]').forEach(function(b){b.addEventListener('click',function(){var p=pack();wa('Hi, I want to order '+C.product+' ('+C.size+'): '+p.label+' for '+rs(p.price)+', Cash on Delivery.')})});
-// order form -> WhatsApp
-var f=$('#orderForm');if(f){f.addEventListener('submit',function(e){e.preventDefault();var g=function(i){return(f.elements[i].value||'').trim()};var err=$('#oErr');
+// payment choice: online (Razorpay) first, COD second
+function paym(){var r=document.querySelector('input[name=paym]:checked');return r?r.value:'online'}
+function payLabel(){var b=$('#oGo'),p=pack();if(!b||!p||b.disabled)return;b.textContent=paym()==='online'?'Pay '+rs(p.price-C.off)+' securely':'Place order · Cash on Delivery '+rs(p.price)}
+document.querySelectorAll('input[name=paym]').forEach(function(i){i.addEventListener('change',payLabel)});
+document.querySelectorAll('[data-pay-go]').forEach(function(a){a.addEventListener('click',function(){var r=document.querySelector('input[name=paym][value='+a.getAttribute('data-pay-go')+']');if(r){r.checked=true;payLabel()}})});
+function loadRzp(){return new Promise(function(ok,no){if(window.Razorpay)return ok();var s=document.createElement('script');s.src='https://checkout.razorpay.com/v1/checkout.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+function post(u,d){return fetch(u,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}).then(function(r){return r.json().catch(function(){return{}}).then(function(j){j._ok=r.ok;j._s=r.status;return j})})}
+var f=$('#orderForm');if(f){f.addEventListener('submit',function(e){e.preventDefault();var g=function(i){return((f.elements[i]&&f.elements[i].value)||'').trim()};var err=$('#oErr');
 var ph=g('phone').replace(/\D/g,'').replace(/^91(?=\d{10}$)/,'');if(g('name').length<2){err.textContent='Please enter your name.';return}
 if(!/^[6-9]\d{9}$/.test(ph)){err.textContent='Please enter a 10-digit mobile number.';return}if(!/^\d{6}$/.test(g('pin'))){err.textContent='Please enter a 6-digit pincode.';return}
 if(g('address').length<10){err.textContent='Please enter your full address.';return}err.textContent='';
-var p=C.packs.filter(function(x){return x.id===g('pack')})[0];
-var msg=function(ref){return 'New order'+(ref?' '+ref:'')+'\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(p.price)+' (free delivery)\nPayment: '+g('pay')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin')};
-var go=$('#oGo');go.disabled=true;go.textContent='Placing your order…';
-if(!f.dataset.ref)f.dataset.ref='CX'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
-var done=function(ok,ref){var d=$('#oDone');var link='https://wa.me/'+C.wa+'?text='+encodeURIComponent(ok?'Hi, I just placed order '+ref+' on your website. Please confirm.':msg(ref));
-d.innerHTML=ok?'<h3>Order placed ✅</h3><p>Order number <b>'+ref+'</b><br>'+p.label+' · '+rs(p.price)+' · Cash on Delivery</p><p class="muted">We will confirm on WhatsApp and share tracking when it ships.</p><a class="btn wa block" target="_blank" rel="noopener" href="'+link+'">Get updates on WhatsApp</a>'
-:'<h3>One more step</h3><p>We could not save your order automatically. Tap below to send it to us on WhatsApp; it is ready to send.</p><a class="btn wa block" target="_blank" rel="noopener" href="'+link+'">Send order on WhatsApp</a>';
-d.hidden=false;if(ok){f.hidden=true}else{go.disabled=false;go.textContent='Place order · Cash on Delivery'}d.scrollIntoView({behavior:'smooth',block:'center'})};
-fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref:f.dataset.ref,pack:p.id,name:g('name'),phone:ph,address:g('address'),city:g('city'),pin:g('pin'),pay:g('pay'),website:g('website')})})
-.then(function(r){return r.json().then(function(j){return {ok:r.ok&&j.ok,j:j}})}).then(function(x){done(x.ok,x.j.ref||f.dataset.ref)}).catch(function(){done(false,f.dataset.ref)})})}
+var p=C.packs.filter(function(x){return x.id===g('pack')})[0],how=paym();
+var data={ref:f.dataset.ref,pack:p.id,name:g('name'),phone:ph,address:g('address'),city:g('city'),pin:g('pin'),website:g('website')};
+var msg=function(ref,paidNote){return 'New order'+(ref?' '+ref:'')+'\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(how==='online'?p.price-C.off:p.price)+' (free delivery)\nPayment: '+(paidNote||'Cash on Delivery')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin')};
+var go=$('#oGo');go.disabled=true;go.textContent=how==='online'?'Opening secure payment…':'Placing your order…';
+if(!f.dataset.ref)f.dataset.ref='CX'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();data.ref=f.dataset.ref;
+var reset=function(){go.disabled=false;payLabel()};
+var show=function(html){var d=$('#oDone');d.innerHTML=html;d.hidden=false;d.scrollIntoView({behavior:'smooth',block:'center'})};
+var waBtn=function(t,label){return '<a class="btn wa block" target="_blank" rel="noopener" href="https://wa.me/'+C.wa+'?text='+encodeURIComponent(t)+'">'+label+'</a>'};
+var placed=function(ref,paid){f.hidden=true;show('<h3>'+(paid?'Payment received ✅':'Order placed ✅')+'</h3><p>Order number <b>'+ref+'</b><br>'+p.label+' · '+rs(paid?p.price-C.off:p.price)+' · '+(paid?'Paid online':'Cash on Delivery')+'</p><p class="muted">'+(paid?'Prepaid orders are packed first. ':'')+'We will confirm on WhatsApp and share tracking when it ships.</p>'+waBtn('Hi, I just placed order '+ref+' on your website. Please confirm.','Get updates on WhatsApp'))};
+if(how==='cod'){post('/api/order',data).then(function(j){if(j._ok&&j.ok)placed(j.ref||data.ref,false);else{reset();show('<h3>One more step</h3><p>We could not save your order automatically. Tap below to send it on WhatsApp; it is ready to send.</p>'+waBtn(msg(data.ref),'Send order on WhatsApp'))}}).catch(function(){reset();show('<h3>One more step</h3><p>No connection. Tap below to send your order on WhatsApp.</p>'+waBtn(msg(data.ref),'Send order on WhatsApp'))});return}
+// online
+Promise.all([post('/api/create-order',data),loadRzp()]).then(function(x){var o=x[0];
+if(!o._ok||!o.order_id){reset();show('<h3>Online payment is not available right now</h3><p>Please choose <b>Cash on Delivery</b> above, or order on WhatsApp.</p>'+waBtn(msg(data.ref),'Order on WhatsApp'));return}
+var rz=new Razorpay({key:o.key_id,order_id:o.order_id,amount:o.amount,currency:'INR',name:'Cream X Emirates',description:p.label+' · '+C.size,prefill:{name:g('name'),contact:'+91'+ph},notes:{ref:o.ref},theme:{color:'#b8456f'},
+handler:function(r){go.textContent='Confirming payment…';post('/api/verify',r).then(function(v){placed(v.ref||o.ref,true)}).catch(function(){placed(o.ref,true)})},
+modal:{ondismiss:function(){reset();show('<h3>Payment not completed</h3><p>No money was taken. Tap <b>Pay</b> to try again, or choose <b>Cash on Delivery</b>.</p>')}}});
+rz.on('payment.failed',function(){reset()});$('#oDone').hidden=true;rz.open()}).catch(function(){reset();show('<h3>Could not open payment</h3><p>Check your connection and try again, or choose <b>Cash on Delivery</b>.</p>')})})}
 // sticky bar after scrolling past the buy buttons
 var s=$('.sticky'),c=$('.ctas');if(s&&c&&'IntersectionObserver' in window){new IntersectionObserver(function(e){s.classList.toggle('show',!e[0].isIntersecting&&e[0].boundingClientRect.top<0)}).observe(c)}
 // review form
@@ -134,6 +151,8 @@ FAQ = [
     ('How do I use Cream X Emirates?', 'At night, cleanse and dry your face, massage in a small amount until absorbed, wait about 10 minutes, then apply a second thin layer as an overnight mask. Rinse with cold water in the morning and use sunscreen.'),
     ('How soon will I see results?', 'Skin often feels softer within a few weeks. Any change in tan or uneven tone is gradual, usually over 8 to 12 weeks, and depends on daily sunscreen. Results vary from person to person.'),
     ('Who should not use it?', 'The brand does not recommend it for children under 14, pregnant women or elderly people. Ask a doctor first if you are breastfeeding or have a skin condition, and never apply it on broken or irritated skin.'),
+    ('How can I pay?', 'Pay online through Razorpay (UPI, cards, net banking or wallets) and get %s off, or choose Cash on Delivery and pay when the parcel arrives.' % rs(PREPAID_OFF)),
+    ('Is paying online safe?', 'Yes. Payments are processed by Razorpay, a licensed Indian payment gateway; we never see your card details or UPI PIN.'),
     ('Is Cash on Delivery available?', 'Yes. You can pay in cash when the parcel arrives, anywhere we deliver in India.'),
     ('How long does delivery take?', 'Orders are packed in 1 to 2 business days and usually delivered in 3 to 7 business days. You get tracking on WhatsApp.'),
     ('Can I return it?', 'Sealed, unused packs can be returned within 7 days of delivery. If your parcel arrives damaged, send us a photo on WhatsApp within 48 hours.'),
@@ -143,13 +162,13 @@ FAQ = [
 def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en-IN', extra=''):
     can = SITE + path
     ld = ''.join('<script type="application/ld+json">%s</script>' % json.dumps(x, ensure_ascii=False) for x in (schema or []))
-    cfg = json.dumps({'wa': WA, 'product': PRODUCT, 'size': SIZE, 'mrp': MRP, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p} for i, l, j, p in PACKS]}, ensure_ascii=False)
-    return '''<!DOCTYPE html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    cfg = json.dumps({'wa': WA, 'off': PREPAID_OFF, 'product': PRODUCT, 'size': SIZE, 'mrp': MRP, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p} for i, l, j, p in PACKS]}, ensure_ascii=False)
+    return ('''<!DOCTYPE html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s"><meta name="robots" content="%s">
 <meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
 <meta name="theme-color" content="#8a2d52"><meta property="og:locale" content="en_IN"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">%s%s</head><body>
-<div class="top">Free delivery across India · Cash on Delivery available</div>
-<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 ml · COD across India</small></a>
+<div class="top">@@TOPBAR@@</div>
+<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 ml · Free delivery in India</small></a>
 <nav><a class="hide-m" href="/#how-to-use">How to use</a><a class="hide-m" href="/guides/">Guides</a><a class="hide-m" href="/faq/">FAQ</a><a class="hide-m" href="/review/">Reviews</a><a href="https://wa.me/%s" rel="noopener">WhatsApp</a></nav></div></header>
 <main>%s</main>
 <footer><div class="wrap"><div class="cols"><div><b>%s</b><p>%s<br>%s</p><p>WhatsApp: <a href="https://wa.me/%s">%s</a>%s</p></div>
@@ -159,7 +178,7 @@ def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en
 <script>window.STORE=%s</script><script src="/assets/site.js" defer></script></body></html>''' % (
         lang, html.escape(title), html.escape(desc), can, robots, html.escape(title), html.escape(desc), can, SITE, ld, extra,
         WA, body, html.escape(OWNER), html.escape(STORE), html.escape(ADDR), WA, WA_SHOW,
-        (' · <a href="mailto:%s">%s</a>' % (EMAIL, EMAIL)) if EMAIL else '', '', html.escape(PRODUCT), html.escape(OWNER), datetime.date.today().year, html.escape(OWNER), cfg)
+        (' · <a href="mailto:%s">%s</a>' % (EMAIL, EMAIL)) if EMAIL else '', '', html.escape(PRODUCT), html.escape(OWNER), datetime.date.today().year, html.escape(OWNER), cfg)).replace('@@TOPBAR@@', ('Extra %s off when you pay online · Free delivery across India' % rs(PREPAID_OFF)) if PREPAID_OFF else 'Free delivery across India · Pay online or Cash on Delivery')
 
 def write(path, doc):
     d = os.path.join(ROOT, path.strip('/'))
@@ -197,10 +216,10 @@ def product_body(h1_tag='h1'):
 <div class="pdp"><div><div class="gal-main">%s</div><div class="gal-thumbs">%s</div></div>
 <div><span class="seller">New pack · same formula · 30 ml</span><%s>%s, %s</%s>
 <p class="muted" style="margin:0">For a brighter, more even-looking, softer face, with a simple night routine</p>
-<div class="price"><b data-price>%s</b><s data-mrp>%s</s><span class="save" data-save>Save %s</span></div><p class="tax">MRP inclusive of all taxes · free delivery</p>
+<div class="price"><b data-price>%s</b><s data-mrp>%s</s><span class="save" data-save>Save %s</span></div><p class="tax">MRP inclusive of all taxes · free delivery</p><p class="online" id="onl">💳 Pay online: <b data-online>@@ONL@@</b> <span>extra @@OFF@@ off · UPI, cards, net banking</span></p>
 <div class="packs" role="radiogroup" aria-label="Choose a pack">%s</div>
-<div class="ctas"><a class="btn" href="#order">Buy now · COD</a><button class="btn wa" type="button" data-wa-order>Order on WhatsApp</button></div>
-<ul class="trust"><li>💵 Cash on Delivery</li><li>🚚 Free delivery in India</li><li>🔒 Sealed, new stock</li><li>↩️ 7-day return on sealed packs</li></ul>
+<div class="ctas"><a class="btn" href="#order" data-pay-go="online">Buy now · Pay online</a><a class="btn ghost" href="#order" data-pay-go="cod">Cash on Delivery</a></div><p class="muted" style="font-size:.85rem;margin:-6px 0 10px;text-align:center">Prefer chat? <button type="button" class="linkbtn" data-wa-order>Order on WhatsApp</button></p>
+<ul class="trust"><li>💳 Secure payment by Razorpay</li><li>💵 Cash on Delivery too</li><li>🚚 Free delivery in India</li><li>↩️ 7-day return on sealed packs</li></ul>
 <p class="eta" style="margin-bottom:6px">📦 Order today, expected delivery <b id="eta">in 3 to 7 business days</b></p><p class="muted" style="font-size:.78rem;margin:0">Sealed, new stock from an independent seller; this is not the brand's official website.</p></div></div></div>
 <section class="band alt" id="details"><div class="wrap"><h2>What it does</h2><p class="muted">The four benefits the brand states for the Glow Restoring Face Crème.</p><div class="feat">
 <div class="card"><b>✨ Brightens skin</b><p>For dull, tired-looking skin; with regular night use and sunscreen, the face looks fresher and more radiant.</p></div>
@@ -221,20 +240,20 @@ def product_body(h1_tag='h1'):
 <li><b>Wait, then layer.</b> After about 10 minutes, apply a second thin layer like a night mask and leave it on overnight.</li>
 <li><b>Rinse in the morning.</b> Wash off with cold water, then apply SPF 30+ sunscreen. Use nightly.</li></ol>
 <p class="note"><b>Not recommended</b> for children under 14, during pregnancy or breastfeeding, or for elderly users, unless a doctor approves. Do not apply on broken, sunburnt or irritated skin. Stop if you get burning, swelling or a rash, and see a doctor.</p></div></section>
-<section class="band alt" id="order"><div class="wrap grid2"><div><h2>Order with Cash on Delivery</h2><p>Fill in your details and tap the button. Your order is placed straight away, and we confirm it on WhatsApp and share tracking once it ships.</p>
-<p class="muted">No advance payment. Pay in cash when the parcel arrives.</p></div>
+<section class="band alt" id="order"><div class="wrap grid2"><div><h2>Place your order</h2><p>Pay online to get <b>@@OFF@@ off</b> and faster dispatch: prepaid orders are packed first. Payment is handled securely by Razorpay (UPI, cards, net banking, wallets).</p>
+<p class="muted">Prefer to pay at the door? Choose Cash on Delivery.</p></div>
 <form class="order" id="orderForm" novalidate><label>Pack<select name="pack" id="oPack">%s</select></label>
 <label>Full name<input name="name" autocomplete="name" required></label><label>Mobile number<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" required placeholder="10-digit number"></label>
 <label>Full address<textarea name="address" rows="3" autocomplete="street-address" required placeholder="House no., street, area, landmark"></textarea></label>
 <div class="two"><label>City<input name="city" autocomplete="address-level2"></label><label>Pincode<input name="pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" required></label></div>
-<label>Payment<select name="pay"><option>Cash on Delivery</option><option>UPI (send payment link on WhatsApp)</option></select></label>
-<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit" id="oGo">Place order · Cash on Delivery</button></form><div id="oDone" class="card" hidden></div></div></section>
+<fieldset class="paysel"><legend>Payment</legend><label class="pay"><input type="radio" name="paym" value="online" checked><span><b>Pay online <span class="tag">Save @@OFF@@</span></b><small>UPI, cards, net banking, wallets · Razorpay</small></span><b data-online>@@ONL@@</b></label><label class="pay"><input type="radio" name="paym" value="cod"><span><b>Cash on Delivery</b><small>Pay in cash when the parcel arrives</small></span><b data-price>@@P1@@</b></label></fieldset>
+<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit" id="oGo">Pay @@ONL@@ securely</button><p class="muted" style="font-size:.78rem;text-align:center;margin:0">🔒 Secured by Razorpay. We never see your card or UPI PIN.</p></form><div id="oDone" class="card" hidden></div></div></section>
 <section class="band"><div class="wrap"><h2>Reviews</h2><p>No reviews yet. Bought from us? <a href="/review/">Share an honest review</a>; we publish real reviews only, with the customer's permission.</p></div></section>
 <section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>CXE Glow Restoring Face Crème</td></tr><tr><td>Size</td><td>30 ml jar</td></tr><tr><td>Price</td><td>@@P1@@ (MRP @@MRP@@)</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
 <section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
-<div class="sticky"><div class="p"><b data-price>%s</b><s data-mrp>%s</s></div><a class="btn" href="#order">Buy now</a></div>''' % (
+<div class="sticky"><div class="p"><b data-online>@@ONL@@</b><s data-mrp>%s</s><small>paying online</small></div><a class="btn" href="#order" data-pay-go="online">Buy now</a></div>''' % (
         tiles[0], thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), rs(MRP), rs(MRP - p1[3]), packs,
-        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]), rs(p1[3]), rs(MRP))).replace('@@P1@@', rs(p1[3])).replace('@@MRP@@', rs(MRP))
+        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]), rs(MRP))).replace('@@P1@@', rs(p1[3])).replace('@@MRP@@', rs(MRP)).replace('@@ONL@@', rs(p1[3] - PREPAID_OFF)).replace('@@OFF@@', rs(PREPAID_OFF))
 
 def simple(path, title, desc, h1, inner, schema=None):
     write(path, layout(path, title, desc, '<section class="band" style="border:0"><div class="wrap prose"><p class="crumb"><a href="/">Home</a> › %s</p><h1>%s</h1>%s</div></section>' % (html.escape(h1), html.escape(h1), inner), schema))
@@ -242,7 +261,7 @@ def simple(path, title, desc, h1, inner, schema=None):
 def build():
     os.makedirs(os.path.join(ROOT, 'assets'), exist_ok=True)
     os.makedirs(os.path.join(ROOT, 'api'), exist_ok=True)
-    open(os.path.join(ROOT, 'api/_packs.json'), 'w').write(json.dumps({'site': SITE.split('//')[-1], 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'desk': 'cx%d' % (n + 1)} for n, (i, l, j, p) in enumerate(PACKS)]}, ensure_ascii=False, indent=1))
+    open(os.path.join(ROOT, 'api/_packs.json'), 'w').write(json.dumps({'site': SITE.split('//')[-1], 'prepaidOff': PREPAID_OFF, 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'desk': 'cx%d' % (n + 1)} for n, (i, l, j, p) in enumerate(PACKS)]}, ensure_ascii=False, indent=1))
     open(os.path.join(ROOT, 'assets/site.css'), 'w').write(CSS)
     open(os.path.join(ROOT, 'assets/site.js'), 'w').write(JS)
     open(os.path.join(ROOT, 'assets/jar.svg'), 'w').write(JAR)
