@@ -149,7 +149,7 @@ def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en
 <meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
 <meta name="theme-color" content="#8a2d52"><meta property="og:locale" content="en_IN"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">%s%s</head><body>
 <div class="top">Free delivery across India · Cash on Delivery available</div>
-<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 ml · Cash on Delivery across India</small></a>
+<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 ml · COD across India</small></a>
 <nav><a class="hide-m" href="/#how-to-use">How to use</a><a class="hide-m" href="/guides/">Guides</a><a class="hide-m" href="/faq/">FAQ</a><a class="hide-m" href="/review/">Reviews</a><a href="https://wa.me/%s" rel="noopener">WhatsApp</a></nav></div></header>
 <main>%s</main>
 <footer><div class="wrap"><div class="cols"><div><b>%s</b><p>%s<br>%s</p><p>WhatsApp: <a href="https://wa.me/%s">%s</a>%s</p></div>
