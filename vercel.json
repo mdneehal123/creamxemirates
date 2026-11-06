@@ -1,0 +1,16 @@
+{
+  "cleanUrls": false,
+  "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/product/cream-x-emirates-face-cream-30g",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/product/cream-x-emirates-face-cream-30g/",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}

@@ -1,0 +1,270 @@
+# Static site builder for an independent Cream X Emirates seller store (run: python3 _build/build.py).
+# Edit CONFIG below, rebuild, push. Pages are written into the repo root.
+import os, json, html, datetime
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# ---------------- CONFIG: change these ----------------
+SITE = 'https://your-domain.in'          # TODO: set the real domain
+STORE = 'Beauty Mart'                    # the seller's store name shown on the site
+OWNER = 'Beauty Mart Pvt Ltd'
+ADDR = 'Azad Nagar 4th Cross, near Anfa Park, Bhatkal, Uttara Kannada, Karnataka 581320, India'
+WA = '919980881230'                      # TODO: confirm the WhatsApp order number
+WA_SHOW = '+91 99808 81230'
+EMAIL = ''                               # optional support email
+PRODUCT = 'Cream X Emirates Face Cream'
+SIZE = '30 g'
+MRP = 849                                # TODO: confirm
+PACKS = [  # (id, label, jars, price) -- TODO: confirm prices
+    ('p1', '1 jar', 1, 799),
+    ('p2', '2 jars', 2, 1499),
+    ('p3', '3 jars', 3, 2099),
+]
+# ------------------------------------------------------
+
+def rs(n): return '₹' + format(n, ',')
+SLUG = 'cream-x-emirates-face-cream-30g'
+PURL = '/product/%s/' % SLUG
+TODAY = datetime.date.today().isoformat()
+
+JAR = '''<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration of a 30 g face cream jar"><defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe9ef"/><stop offset="1" stop-color="#f3d6e0"/></linearGradient>
+<linearGradient id="lid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8456f"/><stop offset="1" stop-color="#8a2d52"/></linearGradient>
+<linearGradient id="jar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#fbf4f6"/><stop offset="1" stop-color="#ead9df"/></linearGradient></defs>
+<rect width="400" height="400" fill="#fbe9ef"/><ellipse cx="200" cy="318" rx="118" ry="16" fill="#d9b3c2" opacity=".55"/>
+<rect x="92" y="190" width="216" height="124" rx="26" fill="url(#jar)" stroke="#e2c6d1" stroke-width="2"/>
+<rect x="84" y="128" width="232" height="74" rx="20" fill="url(#lid)"/><rect x="84" y="182" width="232" height="10" fill="#7a2748" opacity=".35"/>
+<path d="M104 146h192" stroke="#fff" stroke-opacity=".25" stroke-width="6" stroke-linecap="round"/>
+<text x="200" y="250" text-anchor="middle" font-family="Georgia,serif" font-size="25" fill="#5a2140" letter-spacing="1">FACE CREAM</text>
+<text x="200" y="282" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" fill="#9a6a7e" letter-spacing="3">30 g</text></svg>'''
+
+CSS = r''':root{--ink:#2b1a22;--muted:#6f5a64;--rose:#b8456f;--rose-d:#8a2d52;--blush:#fbeef2;--cream:#fffaf7;--line:#efdde4;--ok:#1f7a4d}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--cream)}
+a{color:var(--rose-d)}img,svg{max-width:100%;display:block}h1,h2,h3{font-family:Georgia,"Iowan Old Style",serif;line-height:1.2;margin:0 0 .5em}
+h1{font-size:clamp(1.6rem,4.5vw,2.3rem)}h2{font-size:clamp(1.3rem,3.6vw,1.8rem)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}.muted{color:var(--muted)}
+.top{background:var(--rose-d);color:#fff;text-align:center;font-size:.85rem;padding:7px 10px}
+header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+.logo{font-family:Georgia,serif;font-size:1.3rem;color:var(--ink);text-decoration:none}.logo small{display:block;font:500 .68rem system-ui;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+nav a{color:var(--ink);text-decoration:none;font-size:.92rem;margin-left:16px}nav .hide-m{display:inline}@media(max-width:700px){nav .hide-m{display:none}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 1rem system-ui;text-decoration:none;cursor:pointer}
+.btn:hover{background:var(--rose-d)}.btn.wa{background:#1f8f55}.btn.wa:hover{background:#18744a}.btn.ghost{background:#fff;color:var(--rose-d);border:1.5px solid var(--rose)}.btn.block{width:100%}
+.pdp{display:grid;grid-template-columns:1.05fr 1fr;gap:34px;padding:26px 0 10px}@media(max-width:860px){.pdp{grid-template-columns:1fr;gap:18px;padding-top:14px}}
+.gal-main{border-radius:22px;overflow:hidden;background:#fbe9ef;border:1px solid var(--line)}.gal-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.gal-thumbs button{border:1.5px solid var(--line);border-radius:14px;padding:0;background:#fff;overflow:hidden;cursor:pointer;aspect-ratio:1}.gal-thumbs button[aria-current=true]{border-color:var(--rose)}
+.tile{display:flex;align-items:center;justify-content:center;text-align:center;height:100%;padding:10px;font-size:.8rem;color:var(--rose-d);background:var(--blush)}
+.crumb{font-size:.82rem;color:var(--muted);margin:14px 0 0}.crumb a{color:var(--muted)}
+.seller{display:inline-block;font-size:.78rem;background:var(--blush);color:var(--rose-d);border-radius:999px;padding:4px 12px;margin-bottom:10px}
+.price{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:6px 0 2px}.price b{font-size:1.9rem}.price s{color:var(--muted)}.save{background:#e7f6ee;color:var(--ok);font-weight:600;font-size:.85rem;border-radius:6px;padding:2px 8px}
+.tax{font-size:.82rem;color:var(--muted);margin:0 0 16px}
+.packs{display:grid;gap:10px;margin:14px 0}.pack{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff;cursor:pointer}
+.pack input{accent-color:var(--rose);width:18px;height:18px}.pack .l{flex:1}.pack .l b{display:block}.pack .l span{font-size:.84rem;color:var(--muted)}.pack .r{text-align:right}.pack .r b{display:block}.pack .r s{font-size:.82rem;color:var(--muted)}
+.pack:has(input:checked){border-color:var(--rose);background:#fff6f9}.tag{font-size:.7rem;font-weight:700;color:#fff;background:var(--rose);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:middle}
+.ctas{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}@media(max-width:420px){.ctas{grid-template-columns:1fr}}
+.trust{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0;padding:0;list-style:none;font-size:.88rem}.trust li{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.eta{font-size:.9rem;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:10px 12px}
+section.band{padding:38px 0;border-top:1px solid var(--line)}section.band.alt{background:#fff}
+.steps{counter-reset:s;display:grid;gap:12px;padding:0;list-style:none}.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 14px 14px 56px;position:relative}
+.steps li:before{content:counter(s);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:var(--rose);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px}
+.note{background:var(--blush);border-radius:14px;padding:14px 16px;font-size:.92rem}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:8px 0}summary{font-weight:600;cursor:pointer}details p{margin:.6em 0 .2em}
+form.order{display:grid;gap:12px}form.order label{display:grid;gap:4px;font-size:.9rem;font-weight:600}
+form.order input,form.order select,form.order textarea{font:inherit;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;width:100%}
+form.order input:focus,form.order select:focus,form.order textarea:focus{outline:2px solid var(--rose);border-color:transparent}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.err{color:#b3261e;font-size:.85rem;min-height:1.2em}
+footer{background:#2b1a22;color:#f3e6eb;padding:34px 0 90px;font-size:.9rem}footer a{color:#f3e6eb}footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px}@media(max-width:760px){footer .cols{grid-template-columns:1fr}}
+footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-size:.8rem;color:#cdb8c2}
+.sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;display:none;align-items:center;gap:12px;z-index:30;box-shadow:0 -6px 20px rgba(0,0,0,.06)}
+.sticky .p{flex:1;line-height:1.2}.sticky .p b{display:block;font-size:1.1rem}.sticky .p s{font-size:.8rem;color:var(--muted)}@media(max-width:860px){.sticky.show{display:flex}}
+.prose{max-width:760px}.prose ul{padding-left:1.2em}
+.pack .l .tag{color:#fff}.glist{list-style:none;padding:0;margin:0}.glist li{border-bottom:1px solid var(--line)}.glist a{display:block;padding:12px 0;text-decoration:none;font-weight:600}.glist a:after{content:' ›';color:var(--rose)}
+.answer{background:#fff;border:1px solid var(--line);border-left:5px solid var(--rose);border-radius:12px;padding:14px 16px;font-size:1.05rem}.answer:before{content:'Quick answer';display:block;font:700 .72rem system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--rose-d);margin-bottom:4px}
+.pcard{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin:22px 0}.pcard svg{width:84px;height:84px;border-radius:12px;flex:none}.pcard .t{flex:1}.pcard b{display:block}.pcard .btn{padding:10px 16px;font-size:.92rem}
+.tbl{overflow-x:auto}.spec th{text-align:left;font-size:.85rem;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--line)}.meta{font-size:.82rem;color:var(--muted)}.feat{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}@media(max-width:860px){.feat{grid-template-columns:1fr 1fr}}@media(max-width:480px){.feat{grid-template-columns:1fr}}.feat p{margin:.4em 0 0;font-size:.92rem;color:var(--muted)}
+.tl{list-style:none;padding:0;margin:0;border-left:3px solid var(--rose)}.tl li{padding:0 0 16px 18px;position:relative}.tl li:before{content:'';position:absolute;left:-8px;top:6px;width:13px;height:13px;border-radius:50%;background:var(--rose)}.tl b{display:block}.tl span{color:var(--muted);font-size:.93rem}
+.spec{width:100%;border-collapse:collapse;font-size:.92rem}.spec td{padding:8px 0;border-bottom:1px solid var(--line);vertical-align:top}.spec td:first-child{color:var(--muted);width:40%}.gal-thumbs .tile span{display:none}.gal-thumbs .tile b{font-size:1rem!important}
+@media(max-width:860px){.gal-main{aspect-ratio:16/11;display:flex;justify-content:center;align-items:center}.gal-main>svg{height:100%;width:auto}.gal-main>.tile{width:100%}.gal-thumbs{grid-template-columns:repeat(3,72px)}}
+'''
+
+JS = r'''(function(){
+var C=window.STORE||{};var $=function(s){return document.querySelector(s)};
+function pack(){var r=document.querySelector('input[name=pack]:checked');return C.packs.filter(function(p){return p.id===(r?r.value:'p1')})[0]}
+function rs(n){return '₹'+n.toLocaleString('en-IN')}
+function sync(){var p=pack();if(!p)return;var mrp=C.mrp*p.jars;document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=rs(p.price)});
+document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});
+var o=$('#oPack');if(o)o.value=p.id}
+document.querySelectorAll('input[name=pack]').forEach(function(i){i.addEventListener('change',sync)});
+var op=$('#oPack');if(op)op.addEventListener('change',function(){var r=document.querySelector('input[name=pack][value='+op.value+']');if(r){r.checked=true;sync()}});
+sync();
+// gallery
+document.querySelectorAll('.gal-thumbs button').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.gal-thumbs button').forEach(function(x){x.setAttribute('aria-current','false')});b.setAttribute('aria-current','true');$('.gal-main').innerHTML=b.innerHTML})});
+// delivery estimate: dispatch in 1-2 business days, delivery 3-7 business days
+function addBiz(d,n){d=new Date(d);while(n>0){d.setDate(d.getDate()+1);if(d.getDay()!==0)n--}return d}
+var eta=$('#eta');if(eta){var f={weekday:'short',day:'numeric',month:'short'};eta.textContent=addBiz(new Date(),3).toLocaleDateString('en-IN',f)+' to '+addBiz(new Date(),7).toLocaleDateString('en-IN',f)}
+// WhatsApp quick order
+function wa(t){var a=document.createElement('a');a.href='https://wa.me/'+C.wa+'?text='+encodeURIComponent(t);a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+document.querySelectorAll('[data-wa-order]').forEach(function(b){b.addEventListener('click',function(){var p=pack();wa('Hi, I want to order '+C.product+' ('+C.size+'): '+p.label+' for '+rs(p.price)+', Cash on Delivery.')})});
+// order form -> WhatsApp
+var f=$('#orderForm');if(f){f.addEventListener('submit',function(e){e.preventDefault();var g=function(i){return(f.elements[i].value||'').trim()};var err=$('#oErr');
+var ph=g('phone').replace(/\D/g,'').replace(/^91(?=\d{10}$)/,'');if(g('name').length<2){err.textContent='Please enter your name.';return}
+if(!/^[6-9]\d{9}$/.test(ph)){err.textContent='Please enter a 10-digit mobile number.';return}if(!/^\d{6}$/.test(g('pin'))){err.textContent='Please enter a 6-digit pincode.';return}
+if(g('address').length<10){err.textContent='Please enter your full address.';return}err.textContent='';
+var p=C.packs.filter(function(x){return x.id===g('pack')})[0];
+wa('New order\nProduct: '+C.product+' ('+C.size+')\nPack: '+p.label+'\nTotal: '+rs(p.price)+' (free delivery)\nPayment: '+g('pay')+'\n\nName: '+g('name')+'\nMobile: '+ph+'\nAddress: '+g('address')+'\nCity: '+g('city')+'\nPincode: '+g('pin'))})}
+// sticky bar after scrolling past the buy buttons
+var s=$('.sticky'),c=$('.ctas');if(s&&c&&'IntersectionObserver' in window){new IntersectionObserver(function(e){s.classList.toggle('show',!e[0].isIntersecting&&e[0].boundingClientRect.top<0)}).observe(c)}
+// review form
+var rv=$('#rvGo');if(rv)rv.addEventListener('click',function(){var g=function(i){return($('#'+i).value||'').trim()};if(g('rvX').length<10){$('#rvX').focus();return}
+wa('Review: '+C.product+'\nRating: '+g('rvR')+'\nUsed for: '+g('rvT')+'\nReview: '+g('rvX')+'\nName and city: '+(g('rvN')||'-')+'\nOK to show on website: '+($('#rvOk').checked?'Yes':'No'))});
+})();'''
+
+FAQ = [
+    ('Is this the official Cream X Emirates website?', 'No. This is an independent online store selling sealed packs. We handle your order, delivery and returns ourselves; seller details are in the footer.'),
+    ('How do I use Cream X Emirates?', 'At night, cleanse and dry your face, massage in a small amount until absorbed, wait about 10 minutes, then apply a second thin layer as an overnight mask. Rinse with cold water in the morning and use sunscreen.'),
+    ('How soon will I see results?', 'Skin often feels softer within a few weeks. Any change in tan or uneven tone is gradual, usually over 8 to 12 weeks, and depends on daily sunscreen. Results vary from person to person.'),
+    ('Who should not use it?', 'The brand does not recommend it for children under 14, pregnant women or elderly people. Ask a doctor first if you are breastfeeding or have a skin condition, and never apply it on broken or irritated skin.'),
+    ('Is Cash on Delivery available?', 'Yes. You can pay in cash when the parcel arrives, anywhere we deliver in India.'),
+    ('How long does delivery take?', 'Orders are packed in 1 to 2 business days and usually delivered in 3 to 7 business days. You get tracking on WhatsApp.'),
+    ('Can I return it?', 'Sealed, unused packs can be returned within 7 days of delivery. If your parcel arrives damaged, send us a photo on WhatsApp within 48 hours.'),
+    ('Do I need a patch test?', 'Yes, for any new face cream. Apply a little behind the ear or on the jawline for 24 hours before using it on the whole face.'),
+]
+
+def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en-IN', extra=''):
+    can = SITE + path
+    ld = ''.join('<script type="application/ld+json">%s</script>' % json.dumps(x, ensure_ascii=False) for x in (schema or []))
+    cfg = json.dumps({'wa': WA, 'product': PRODUCT, 'size': SIZE, 'mrp': MRP, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p} for i, l, j, p in PACKS]}, ensure_ascii=False)
+    return '''<!DOCTYPE html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s"><meta name="robots" content="%s">
+<meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
+<meta name="theme-color" content="#8a2d52"><meta property="og:locale" content="en_IN"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">%s%s</head><body>
+<div class="top">Free delivery across India · Cash on Delivery available</div>
+<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 g · Cash on Delivery across India</small></a>
+<nav><a class="hide-m" href="/#how-to-use">How to use</a><a class="hide-m" href="/guides/">Guides</a><a class="hide-m" href="/faq/">FAQ</a><a class="hide-m" href="/review/">Reviews</a><a href="https://wa.me/%s" rel="noopener">WhatsApp</a></nav></div></header>
+<main>%s</main>
+<footer><div class="wrap"><div class="cols"><div><b>%s</b><p>%s<br>%s</p><p>WhatsApp: <a href="https://wa.me/%s">%s</a>%s</p></div>
+<div><b>Shop</b><p><a href="/%s">%s</a><br><a href="/#order">Order on COD</a><br><a href="/review/">Write a review</a></p></div>
+<div><b>Help</b><p><a href="/guides/">Guides</a><br><a href="/faq/">FAQ</a><br><a href="/shipping-policy/">Shipping</a><br><a href="/refund-policy/">Returns and refunds</a><br><a href="/privacy-policy/">Privacy</a><br><a href="/terms/">Terms</a><br><a href="/contact/">Contact</a></p></div></div>
+<p class="disc">Cream X Emirates is a trademark of its owner. This website is run by %s, an independent seller, and is not the official brand website. Product information is general cosmetic guidance, not medical advice; results vary from person to person.<br>© %d %s</p></div></footer>
+<script>window.STORE=%s</script><script src="/assets/site.js" defer></script></body></html>''' % (
+        lang, html.escape(title), html.escape(desc), can, robots, html.escape(title), html.escape(desc), can, SITE, ld, extra,
+        WA, body, html.escape(OWNER), html.escape(STORE), html.escape(ADDR), WA, WA_SHOW,
+        (' · <a href="mailto:%s">%s</a>' % (EMAIL, EMAIL)) if EMAIL else '', '', html.escape(PRODUCT), html.escape(OWNER), datetime.date.today().year, html.escape(OWNER), cfg)
+
+def write(path, doc):
+    d = os.path.join(ROOT, path.strip('/'))
+    os.makedirs(d, exist_ok=True)
+    open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(doc)
+
+def faq_html(items):
+    return ''.join('<details><summary>%s</summary><p>%s</p></details>' % (html.escape(q), html.escape(a)) for q, a in items)
+
+def faq_ld(items):
+    return {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [{'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in items]}
+
+def product_ld():
+    p1 = PACKS[0]
+    return {'@context': 'https://schema.org', '@type': 'Product', 'name': '%s %s' % (PRODUCT, SIZE), 'brand': {'@type': 'Brand', 'name': 'Cream X Emirates'},
+            'description': 'Cream X Emirates face cream, %s, sold by %s, an independent seller in India.' % (SIZE, OWNER), 'image': [SITE + '/assets/og.png'], 'url': SITE + '/', 'sku': 'CXE-30G',
+            'offers': {'@type': 'Offer', 'price': str(p1[3]), 'priceCurrency': 'INR', 'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': SITE + '/',
+                       'seller': {'@type': 'Organization', 'name': OWNER},
+                       'shippingDetails': {'@type': 'OfferShippingDetails', 'shippingRate': {'@type': 'MonetaryAmount', 'value': '0', 'currency': 'INR'}, 'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'IN'},
+                                           'deliveryTime': {'@type': 'ShippingDeliveryTime', 'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 1, 'maxValue': 2, 'unitCode': 'DAY'}, 'transitTime': {'@type': 'QuantitativeValue', 'minValue': 2, 'maxValue': 5, 'unitCode': 'DAY'}}},
+                       'hasMerchantReturnPolicy': {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'IN', 'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow', 'merchantReturnDays': 7, 'returnMethod': 'https://schema.org/ReturnByMail', 'returnFees': 'https://schema.org/FreeReturn'}}}
+
+def product_body(h1_tag='h1'):
+    packs = ''.join('''<label class="pack"><input type="radio" name="pack" value="%s"%s><span class="l"><b>%s%s</b><span>%s per jar</span></span><span class="r"><b>%s</b><s>%s</s></span></label>''' % (
+        i, ' checked' if n == 0 else '', l, ' <span class="tag">Best value</span>' if n == len(PACKS) - 1 else (' <span class="tag">Popular</span>' if n == 1 else ''),
+        rs(round(p / j)), rs(p), rs(MRP * j)) for n, (i, l, j, p) in enumerate(PACKS))
+    opts = ''.join('<option value="%s">%s · %s</option>' % (i, l, rs(p)) for i, l, j, p in PACKS)
+    p1 = PACKS[0]
+    tiles = [JAR, '<div class="tile"><div><b style="font-size:1.4rem">Night</b><span><br>Pea-sized amount on a clean, dry face</span></div></div>', '<div class="tile"><div><b style="font-size:1.4rem">SPF</b><span><br>Sunscreen every morning</span></div></div>']
+    thumbs = ''.join('<button type="button" aria-label="Image %d" aria-current="%s">%s</button>' % (n + 1, 'true' if n == 0 else 'false', t) for n, t in enumerate(tiles))
+    return ('''<div class="wrap"><p class="crumb"><a href="/">Home</a> › Face cream</p>
+<div class="pdp"><div><div class="gal-main">%s</div><div class="gal-thumbs">%s</div></div>
+<div><span class="seller">Night face cream · 30 g</span><%s>%s, %s</%s>
+<p class="muted" style="margin:0">For a brighter, more even-looking, softer face, with a simple night routine</p>
+<div class="price"><b data-price>%s</b><s data-mrp>%s</s><span class="save" data-save>Save %s</span></div><p class="tax">MRP inclusive of all taxes · free delivery</p>
+<div class="packs" role="radiogroup" aria-label="Choose a pack">%s</div>
+<div class="ctas"><a class="btn" href="#order">Buy now · COD</a><button class="btn wa" type="button" data-wa-order>Order on WhatsApp</button></div>
+<ul class="trust"><li>💵 Cash on Delivery</li><li>🚚 Free delivery in India</li><li>🔒 Sealed, new stock</li><li>↩️ 7-day return on sealed packs</li></ul>
+<p class="eta" style="margin-bottom:6px">📦 Order today, expected delivery <b id="eta">in 3 to 7 business days</b></p><p class="muted" style="font-size:.78rem;margin:0">Sealed, new stock from an independent seller; this is not the brand's official website.</p></div></div></div>
+<section class="band alt" id="details"><div class="wrap"><h2>Why people choose it</h2><div class="feat">
+<div class="card"><b>✨ Brighter-looking skin</b><p>Made for dull, tired-looking skin; with regular night use and sunscreen, skin looks fresher and more radiant.</p></div>
+<div class="card"><b>🌗 More even-looking tone</b><p>For tan and uneven patches on the face, which look lighter gradually over 8 to 12 weeks with daily sun protection.</p></div>
+<div class="card"><b>🤍 Softer, smoother feel</b><p>A cream texture for night use, so skin feels soft and comfortable by morning.</p></div>
+<div class="card"><b>🌙 Simple night routine</b><p>Cleanse, massage in, add a thin overnight layer, rinse in the morning.</p></div></div></div></section>
+<section class="band"><div class="wrap grid2"><div><h2>What to expect</h2><ol class="tl"><li><b>Week 1 to 2</b><span>Skin adjusts and feels softer. If it feels dry or tingly, use every other night at first.</span></li>
+<li><b>Week 3 to 4</b><span>Smoother feel and a fresher look in the morning.</span></li><li><b>Week 8 to 12</b><span>Tan and uneven patches look lighter, if you wear sunscreen every day.</span></li></ol>
+<p class="muted" style="font-size:.85rem">Results vary from person to person. A face cream does not change your natural skin colour.</p></div>
+<div class="card"><h3>Product details</h3><table class="spec"><tbody>
+<tr><td>Product</td><td>%s</td></tr><tr><td>Net quantity</td><td>%s</td></tr><tr><td>Type</td><td>Face cream, leave-on</td></tr><tr><td>When to use</td><td>Night</td></tr>
+<tr><td>Where</td><td>Face and neck; avoid eyes and lips</td></tr><tr><td>Skin type</td><td>Most adult skin; patch test first</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, breastfeeding or elderly users without a doctor's advice</td></tr>
+<tr><td>Ingredients</td><td>Full list printed on the pack</td></tr><tr><td>Packaging</td><td>Sealed jar</td></tr><tr><td>Delivery</td><td>Free across India, COD available</td></tr></tbody></table></div></div></section>
+<section class="band" id="how-to-use"><div class="wrap"><h2>How to use</h2><p class="muted">Following the brand's directions, with a patch test first and sunscreen in the morning.</p><ol class="steps">
+<li><b>Patch test first.</b> Apply a little behind the ear or on the jawline and wait 24 hours.</li>
+<li><b>Cleanse.</b> Wash your face well and pat it dry.</li>
+<li><b>Massage in.</b> Take a small amount and massage it into the face until it absorbs. Avoid the eyes and lips.</li>
+<li><b>Wait, then layer.</b> After about 10 minutes, apply a second thin layer like a night mask and leave it on overnight.</li>
+<li><b>Rinse in the morning.</b> Wash off with cold water, then apply SPF 30+ sunscreen. Use nightly.</li></ol>
+<p class="note"><b>Not recommended</b> for children under 14, during pregnancy or breastfeeding, or for elderly users, unless a doctor approves. Do not apply on broken, sunburnt or irritated skin. Stop if you get burning, swelling or a rash, and see a doctor.</p></div></section>
+<section class="band alt" id="order"><div class="wrap grid2"><div><h2>Order with Cash on Delivery</h2><p>Fill in your details and tap the button. Your order opens in WhatsApp, ready to send. We confirm it on WhatsApp and share tracking once it ships.</p>
+<p class="muted">No advance payment. Pay in cash when the parcel arrives.</p></div>
+<form class="order" id="orderForm" novalidate><label>Pack<select name="pack" id="oPack">%s</select></label>
+<label>Full name<input name="name" autocomplete="name" required></label><label>Mobile number<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" required placeholder="10-digit number"></label>
+<label>Full address<textarea name="address" rows="3" autocomplete="street-address" required placeholder="House no., street, area, landmark"></textarea></label>
+<div class="two"><label>City<input name="city" autocomplete="address-level2"></label><label>Pincode<input name="pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" required></label></div>
+<label>Payment<select name="pay"><option>Cash on Delivery</option><option>UPI (send payment link on WhatsApp)</option></select></label>
+<p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit">Place order on WhatsApp</button></form></div></section>
+<section class="band"><div class="wrap"><h2>Reviews</h2><p>No reviews yet. Bought from us? <a href="/review/">Share an honest review</a>; we publish real reviews only, with the customer's permission.</p></div></section>
+<section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>Cream X Emirates face cream</td></tr><tr><td>Size</td><td>30 g jar</td></tr><tr><td>Price</td><td>@@P1@@ (MRP @@MRP@@)</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
+<section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
+<div class="sticky"><div class="p"><b data-price>%s</b><s data-mrp>%s</s></div><a class="btn" href="#order">Buy now</a></div>''' % (
+        JAR, thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), rs(MRP), rs(MRP - p1[3]), packs,
+        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]), rs(p1[3]), rs(MRP))).replace('@@P1@@', rs(p1[3])).replace('@@MRP@@', rs(MRP))
+
+def simple(path, title, desc, h1, inner, schema=None):
+    write(path, layout(path, title, desc, '<section class="band" style="border:0"><div class="wrap prose"><p class="crumb"><a href="/">Home</a> › %s</p><h1>%s</h1>%s</div></section>' % (html.escape(h1), html.escape(h1), inner), schema))
+
+def build():
+    os.makedirs(os.path.join(ROOT, 'assets'), exist_ok=True)
+    open(os.path.join(ROOT, 'assets/site.css'), 'w').write(CSS)
+    open(os.path.join(ROOT, 'assets/site.js'), 'w').write(JS)
+    open(os.path.join(ROOT, 'assets/jar.svg'), 'w').write(JAR)
+    open(os.path.join(ROOT, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#fbe9ef"/><rect x="12" y="18" width="40" height="12" rx="4" fill="#8a2d52"/><rect x="15" y="29" width="34" height="20" rx="5" fill="#fff" stroke="#e2c6d1"/></svg>')
+    title = '%s %s: Price, Benefits, How to Use | COD India' % (PRODUCT, SIZE)
+    desc = 'Buy %s (%s) online for %s: benefits, how to use, what to expect week by week, free delivery across India and Cash on Delivery.' % (PRODUCT, SIZE, rs(PACKS[0][3]))
+    sch = [product_ld(), faq_ld(FAQ[:5]), {'@context': 'https://schema.org', '@type': 'Organization', 'name': OWNER, 'url': SITE, 'address': ADDR, 'contactPoint': {'@type': 'ContactPoint', 'telephone': '+' + WA, 'contactType': 'customer service', 'areaServed': 'IN'}}]
+    import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import seo
+    extra_urls = seo.build_all(globals(), sch, title, desc)
+    # /product/... redirects to the home page (vercel.json), so there is one product page and no duplicate
+    open(os.path.join(ROOT, 'vercel.json'), 'w').write(json.dumps({'cleanUrls': False, 'trailingSlash': True, 'redirects': [{'source': PURL.rstrip('/'), 'destination': '/', 'permanent': True}, {'source': PURL, 'destination': '/', 'permanent': True}]}, indent=2))
+    simple('/faq/', 'Cream X Emirates FAQ: How to Use, Delivery, COD and Returns', 'Answers about using %s, who should avoid it, delivery times, Cash on Delivery and returns.' % PRODUCT, 'Questions and answers', faq_html(FAQ), [faq_ld(FAQ)])
+    simple('/shipping-policy/', 'Shipping Policy | Cream X Emirates', 'Free delivery across India. Orders packed in 1 to 2 business days and delivered in 3 to 7 business days.', 'Shipping policy',
+           '<ul><li>Free delivery on all orders across India.</li><li>Orders are packed in 1 to 2 business days and usually delivered in 3 to 7 business days.</li><li>Cash on Delivery is available on all pincodes our courier serves.</li><li>Tracking is shared on WhatsApp once the parcel ships.</li><li>Remote areas can take a few extra days.</li></ul>')
+    simple('/refund-policy/', 'Returns and Refunds | Cream X Emirates', 'Sealed, unused packs can be returned within 7 days of delivery. Damaged parcels: send a photo within 48 hours.', 'Returns and refunds',
+           '<ul><li>Sealed, unused packs can be returned within 7 days of delivery.</li><li>For hygiene reasons, opened products cannot be returned unless they arrived damaged or wrong.</li><li>Damaged or wrong item: send a photo or unboxing video on WhatsApp within 48 hours of delivery and we will replace it or refund you.</li><li>Refunds are made to your UPI or bank account within 5 to 7 business days after we receive the return.</li></ul><p>WhatsApp: <a href="https://wa.me/%s">%s</a></p>' % (WA, WA_SHOW))
+    simple('/privacy-policy/', 'Privacy Policy | Cream X Emirates', 'How %s uses the name, phone number and address you share to deliver your order.' % STORE, 'Privacy policy',
+           '<p>We collect only what we need to deliver your order: your name, mobile number and address, which you send us on WhatsApp. We share it only with our courier partner for delivery. We do not sell your data. To have your details deleted, message us on WhatsApp at %s.</p>' % WA_SHOW)
+    simple('/terms/', 'Terms of Sale | Cream X Emirates', 'Terms for orders placed with %s.' % OWNER, 'Terms of sale',
+           '<p>Orders on this website are sold and shipped by %s, %s. %s is an independent seller and is not the brand owner of Cream X Emirates. Prices include all taxes. We may cancel an order if a product is out of stock or a pincode is not serviceable, and will tell you on WhatsApp. Product information is general cosmetic guidance, not medical advice.</p>' % (html.escape(OWNER), html.escape(ADDR), html.escape(STORE)))
+    simple('/contact/', 'Contact | Cream X Emirates', 'Contact %s on WhatsApp for orders, tracking and returns.' % STORE, 'Contact us',
+           '<p><b>%s</b><br>%s</p><p>WhatsApp: <a href="https://wa.me/%s">%s</a><br>Monday to Saturday, 10 am to 7 pm</p>' % (html.escape(OWNER), html.escape(ADDR), WA, WA_SHOW))
+    simple('/review/', 'Review Your Order | Cream X Emirates', 'Bought %s from %s? Share an honest review on WhatsApp.' % (PRODUCT, STORE), 'Share your review',
+           '''<p>Tell us honestly how the cream worked for you. With your permission we may show your review on this website with your first name and city only.</p>
+<form class="order" onsubmit="return false"><label>Rating<select id="rvR"><option>5 - Excellent</option><option>4 - Good</option><option>3 - Okay</option><option>2 - Not great</option><option>1 - Poor</option></select></label>
+<label>How long have you used it?<select id="rvT"><option>Less than 2 weeks</option><option>2 to 4 weeks</option><option>1 to 2 months</option><option>More than 2 months</option></select></label>
+<label>Your review<textarea id="rvX" rows="5" placeholder="What did you like? What could be better? Your skin type helps too."></textarea></label>
+<label>First name and city<input id="rvN" placeholder="e.g. Priya, Mangaluru"></label>
+<label style="display:flex;gap:8px;align-items:flex-start;font-weight:400"><input type="checkbox" id="rvOk" style="width:auto;margin-top:5px"> You may show my review on the website with my first name and city.</label>
+<button class="btn" id="rvGo" type="button">Send review on WhatsApp</button></form>
+<h2 style="margin-top:28px">Review policy</h2><ul><li>Real customers only, shown with permission.</li><li>No paid reviews, no discounts for good ratings.</li><li>We show mixed reviews too.</li></ul>''')
+    urls = ['/'] + extra_urls + ['/faq/', '/review/', '/shipping-policy/', '/refund-policy/', '/privacy-policy/', '/terms/', '/contact/']
+    open(os.path.join(ROOT, 'sitemap.xml'), 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">%s</urlset>\n' % ''.join('<url><loc>%s%s</loc><lastmod>%s</lastmod></url>' % (SITE, u, TODAY) for u in urls))
+    open(os.path.join(ROOT, 'robots.txt'), 'w').write(''.join('User-agent: %s\nAllow: /\n\n' % b for b in ['*', 'Googlebot', 'Bingbot', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended']) + 'Sitemap: %s/sitemap.xml\n' % SITE)
+    print('built', len(urls), 'pages')
+
+if __name__ == '__main__':
+    build()
