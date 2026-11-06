@@ -13,13 +13,13 @@ def guides(P, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, OFF=50, CODF=100):
         title='Cream X Emirates Price in India (30 ml): New Jar, Pack of 2 and Old Jar Offer',
         seo='Cream X Emirates Price in India: 30 ml Jar, Pack of 2, COD',
         desc='Cream X Emirates price in India: %s for one new 30 ml jar, %s for two, and %s for the old white jar while stock lasts. %s off when you pay online; free delivery.' % (rs(p1), rs(p2), rs(po), rs(OFF)),
-        answer='One new 30 ml jar of Cream X Emirates (CXE Glow Restoring Face Crème) is <b>%s</b>, two jars are <b>%s</b>, and the <b>old white jar is %s</b> while stock lasts. Pay online and get <b>%s off</b>; Cash on Delivery has a %s charge. Delivery is free across India.' % (rs(p1), rs(p2), rs(po), rs(OFF), rs(CODF)),
-        body='''<h2>Prices</h2><div class="tbl"><table class="spec"><thead><tr><th>Option</th><th>Price</th><th>Pay online</th><th>Cash on Delivery</th></tr></thead><tbody>%s</tbody></table></div>
+        answer='One new 30 ml jar of Cream X Emirates (CXE Glow Restoring Face Crème) is <b>%s</b> (MRP ₹2,200), two jars are <b>%s</b>, and the <b>old white jar is %s</b> while stock lasts. Pay online and get <b>%s off</b>; Cash on Delivery has a %s charge. Delivery is free across India.' % (rs(p1), rs(p2), rs(po), rs(OFF), rs(CODF)),
+        body='''<h2>Prices</h2><div class="tbl"><table class="spec"><thead><tr><th>Option</th><th>MRP</th><th>Price</th><th>Pay online</th><th>Cash on Delivery</th></tr></thead><tbody>%s</tbody></table></div>
 <h2>Old white jar or new pink jar?</h2><p>The brand changed its packaging from a white jar to a pink CXE jar and says the formula is the same. We still have some old white jars, sold at a lower clearance price until they run out. Check the expiry date printed on either pack. Read <a href="/original-cream-x-emirates/">old vs new packaging</a>.</p>
 <h2>What is included</h2><ul><li>Sealed 30 ml jar(s), new stock</li><li>Free delivery anywhere we ship in India</li><li>Pay online (UPI, cards, net banking) or Cash on Delivery</li><li>7-day return on sealed, unused packs</li></ul>
 <h2>Why prices differ between sellers</h2><p>The MRP printed on the pack is the maximum anyone can charge, and sellers may sell below it. A price far below others is a warning sign: very cheap jars may be expired, refilled or fake. Read <a href="/original-cream-x-emirates/">how to check an original pack</a>.</p>
-<h2>How long one jar lasts</h2><p>With the brand's night routine (a small amount, then a thin overnight layer), one 30 ml jar usually lasts around 4 to 6 weeks of nightly use. Visible change takes 8 to 12 weeks, so the pack of 2 is better value if you plan to continue.</p>''' % ''.join('<tr><td>%s</td><td><b>%s</b></td><td>%s</td><td>%s</td></tr>' % (l, rs(p), rs(p - OFF), rs(p + CODF)) for i, l, j, p in PACKS),
-        faq=[('What is the price of Cream X Emirates 30 ml?', '%s for one new jar, %s for two, or %s for the old white jar while stock lasts.' % (rs(p1), rs(p2), rs(po))),
+<h2>How long one jar lasts</h2><p>With the brand's night routine (a small amount, then a thin overnight layer), one 30 ml jar usually lasts around 4 to 6 weeks of nightly use. Visible change takes 8 to 12 weeks, so the pack of 2 is better value if you plan to continue.</p>''' % ''.join('<tr><td>%s</td><td>%s</td><td><b>%s</b></td><td>%s</td><td>%s</td></tr>' % (l, ('<s>%s</s>' % rs(2200 * j)) if i != 'o1' else '–', rs(p), rs(p - OFF), rs(p + CODF)) for i, l, j, p in PACKS),
+        faq=[('What is the price of Cream X Emirates 30 ml?', 'The MRP is ₹2,200. Here it is %s for one new jar, %s for two, or %s for the old white jar while stock lasts.' % (rs(p1), rs(p2), rs(po))),
              ('Is Cash on Delivery available?', 'Yes, with a %s COD charge. Paying online is cheaper: %s off.' % (rs(CODF), rs(OFF))),
              ('Is the old jar the same cream?', 'The brand says the formula is the same; only the packaging changed. Check the expiry date on the pack.')]))
 
@@ -178,10 +178,10 @@ def build_all(B, sch, title, desc):
         '- Malayalam: %s/ml/cream-x-emirates/' % SITE, '- Hindi: %s/hi/cream-x-emirates/' % SITE, '']))
     items = ''.join(
         '<item><g:id>CXE-30ML-%s</g:id><title>%s %s, %s</title><description>%s, %s. Night face cream. Free delivery in India, Cash on Delivery.</description><link>%s/</link>'
-        '<g:image_link>%s/assets/img/cxe-jars.jpg</g:image_link><g:availability>in_stock</g:availability><g:price>%d.00 INR</g:price>'
+        '<g:image_link>%s/assets/img/cxe-jars.jpg</g:image_link><g:availability>in_stock</g:availability><g:price>%d.00 INR</g:price>%s'
         '<g:brand>Cream X Emirates</g:brand><g:condition>new</g:condition><g:identifier_exists>no</g:identifier_exists><g:google_product_category>2740</g:google_product_category>'
         '<g:shipping><g:country>IN</g:country><g:price>0 INR</g:price></g:shipping>%s</item>' % (
-            i, html.escape(PRODUCT), SIZE, lb, html.escape(PRODUCT), SIZE, SITE, SITE, p, ('<g:multipack>%d</g:multipack>' % j) if j > 1 else '')
+            i, html.escape(PRODUCT), SIZE, lb, html.escape(PRODUCT), SIZE, SITE, SITE, (B['PACK_INFO'][i]['cmp'] or p), ('<g:sale_price>%d.00 INR</g:sale_price>' % p) if B['PACK_INFO'][i]['cmp'] else '', ('<g:multipack>%d</g:multipack>' % j) if j > 1 else '')
         for i, lb, j, p in PACKS)
     os.makedirs(os.path.join(ROOT, 'feeds'), exist_ok=True)
     open(os.path.join(ROOT, 'feeds/products.xml'), 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"><channel><title>Cream X Emirates store</title><link>%s/</link><description>Products</description>%s</channel></rss>\n' % (SITE, items))

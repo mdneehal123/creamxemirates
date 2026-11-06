@@ -16,7 +16,7 @@ PRODUCT = 'Cream X Emirates Glow Restoring Face Crème'
 SIZE = '30 ml'
 COD_FEE = 100                            # extra charge for Cash on Delivery; 0 turns it off
 PREPAID_OFF = 50                         # extra discount for paying online (Razorpay); 0 turns it off
-MRP = None  # printed MRP of one new jar; None hides the crossed-out MRP until it is confirmed
+MRP = 2200  # MRP of one new pink jar (crossed-out price)
 #                               # TODO: confirm
 PACKS = [  # (id, label, jars, price): the options on the page, in order
     ('p1', '1 new pink jar', 1, 1100),
@@ -24,8 +24,8 @@ PACKS = [  # (id, label, jars, price): the options on the page, in order
     ('o1', '1 old white jar', 1, 749),
 ]
 PACK_INFO = {  # line under each option, badge, photo shown when chosen (index in the gallery), compare-at price (crossed out; None = none)
-    'p1': {'sub': 'New CXE pink pack', 'tag': '', 'img': 1, 'cmp': None},
-    'p2': {'sub': '₹925 per jar · save ₹350 vs 2 singles', 'tag': 'Best value', 'img': 3, 'cmp': 2200},
+    'p1': {'sub': 'New CXE pink pack · MRP ₹2,200', 'tag': '50% off', 'img': 1, 'cmp': 2200},
+    'p2': {'sub': '₹925 per jar · MRP ₹4,400', 'tag': 'Best value', 'img': 3, 'cmp': 4400},
     'o1': {'sub': 'Old white pack · same formula · clearance', 'tag': 'Clearance', 'img': 2, 'cmp': None},
 }
 # ------------------------------------------------------
@@ -245,7 +245,7 @@ def product_body(h1_tag='h1'):
 <div class="pdp"><div><div class="gal-main">%s</div><div class="gal-thumbs">%s</div></div>
 <div><span class="seller">New pack · same formula · 30 ml</span><%s>%s, %s</%s>
 <p class="muted" style="margin:0">For a brighter, more even-looking, softer face, with a simple night routine</p>
-<div class="price"><b data-price>%s</b><s data-mrp></s><span class="save" data-save hidden></span></div><p class="tax">Inclusive of all taxes · free delivery</p><p class="online" id="onl">💳 Pay online: <b data-online>@@ONL@@</b> <span>extra @@OFF@@ off · UPI, cards, net banking</span></p>
+<div class="price"><b data-price>%s</b><s data-mrp>@@MRPS@@</s><span class="save" data-save>@@SAVE@@</span></div><p class="tax">MRP inclusive of all taxes · free delivery</p><p class="online" id="onl">💳 Pay online: <b data-online>@@ONL@@</b> <span>extra @@OFF@@ off · UPI, cards, net banking</span></p>
 <div class="packs" role="radiogroup" aria-label="Choose a pack">%s</div>
 <div class="ctas"><a class="btn shine" href="#order" data-pay-go="online">Buy now · Pay online</a><a class="btn ghost" href="#order" data-pay-go="cod">Cash on Delivery <small data-codfee>(+@@CODFEE@@)</small></a></div>
 <ul class="trust"><li>💳 Secure payment by Razorpay</li><li>💵 COD available (+@@CODFEE@@)</li><li>🚚 Free delivery in India</li><li>↩️ 7-day return on sealed packs</li></ul>
@@ -278,11 +278,11 @@ def product_body(h1_tag='h1'):
 <fieldset class="paysel"><legend>Payment</legend><label class="pay"><input type="radio" name="paym" value="online" checked><span><b>Pay online <span class="tag">Save @@OFF@@</span></b><small>UPI, cards, net banking, wallets · Razorpay</small></span><b data-online>@@ONL@@</b></label><label class="pay"><input type="radio" name="paym" value="cod"><span><b>Cash on Delivery</b><small>+@@CODFEE@@ COD charge · pay in cash at the door</small></span><b data-codprice>@@CODP@@</b></label></fieldset>
 <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block shine" type="submit" id="oGo">Pay @@ONL@@ securely</button><p class="muted" style="font-size:.78rem;text-align:center;margin:0">🔒 Secured by Razorpay. We never see your card or UPI PIN.</p></form><div id="oDone" class="card" hidden></div></div></section>
 <section class="band"><div class="wrap"><h2>Reviews</h2><p>No reviews yet. Bought from us? <a href="/review/">Share an honest review</a>; we publish real reviews only, with the customer's permission.</p></div></section>
-<section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>CXE Glow Restoring Face Crème</td></tr><tr><td>Size</td><td>30 ml jar</td></tr><tr><td>Price</td><td>New jar @@P1@@ · 2 jars @@P2@@ · old jar @@PO@@</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
+<section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>CXE Glow Restoring Face Crème</td></tr><tr><td>Size</td><td>30 ml jar</td></tr><tr><td>MRP</td><td>₹2,200 (new jar)</td></tr><tr><td>Price</td><td>New jar @@P1@@ · 2 jars @@P2@@ · old jar @@PO@@</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
 <section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
 <div class="sticky"><div class="p"><b data-online>@@ONL@@</b><small>paying online</small></div><a class="btn" href="#order" data-pay-go="online">Buy now</a></div>''' % (
         tiles[0], thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), packs,
-        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]))).replace('@@P1@@', rs(p1[3])).replace('@@P2@@', rs(PACKS[1][3])).replace('@@PO@@', rs(PACKS[2][3])).replace('@@ONL@@', rs(p1[3] - PREPAID_OFF)).replace('@@OFF@@', rs(PREPAID_OFF)).replace('@@CODFEE@@', rs(COD_FEE)).replace('@@CODP@@', rs(p1[3] + COD_FEE))
+        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]))).replace('@@MRPS@@', rs(PACK_INFO[p1[0]]['cmp']) if PACK_INFO[p1[0]]['cmp'] else '').replace('@@SAVE@@', ('Save ' + rs(PACK_INFO[p1[0]]['cmp'] - p1[3])) if PACK_INFO[p1[0]]['cmp'] else '').replace('@@P1@@', rs(p1[3])).replace('@@P2@@', rs(PACKS[1][3])).replace('@@PO@@', rs(PACKS[2][3])).replace('@@ONL@@', rs(p1[3] - PREPAID_OFF)).replace('@@OFF@@', rs(PREPAID_OFF)).replace('@@CODFEE@@', rs(COD_FEE)).replace('@@CODP@@', rs(p1[3] + COD_FEE))
 
 def simple(path, title, desc, h1, inner, schema=None):
     write(path, layout(path, title, desc, '<section class="band" style="border:0"><div class="wrap prose"><p class="crumb"><a href="/">Home</a> › %s</p><h1>%s</h1>%s</div></section>' % (html.escape(h1), html.escape(h1), inner), schema))
