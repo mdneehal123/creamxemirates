@@ -4,7 +4,7 @@ function pack(){var r=document.querySelector('input[name=pack]:checked');return 
 function rs(n){return '₹'+n.toLocaleString('en-IN')}
 function sync(){var p=pack();if(!p)return;var mrp=C.mrp*p.jars;document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=rs(p.price)});
 document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});
-var o=$('#oPack');if(o)o.value=p.id}
+var o=$('#oPack');if(o)o.value=p.id;var t=document.querySelectorAll('.gal-thumbs button');var k=p.jars===2?3:0;if(t[k]&&sync.ready){t[k].click()}sync.ready=true}
 document.querySelectorAll('input[name=pack]').forEach(function(i){i.addEventListener('change',sync)});
 var op=$('#oPack');if(op)op.addEventListener('change',function(){var r=document.querySelector('input[name=pack][value='+op.value+']');if(r){r.checked=true;sync()}});
 sync();

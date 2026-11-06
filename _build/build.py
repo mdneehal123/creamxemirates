@@ -95,7 +95,7 @@ function pack(){var r=document.querySelector('input[name=pack]:checked');return 
 function rs(n){return '₹'+n.toLocaleString('en-IN')}
 function sync(){var p=pack();if(!p)return;var mrp=C.mrp*p.jars;document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=rs(p.price)});
 document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});
-var o=$('#oPack');if(o)o.value=p.id}
+var o=$('#oPack');if(o)o.value=p.id;var t=document.querySelectorAll('.gal-thumbs button');var k=p.jars===2?3:0;if(t[k]&&sync.ready){t[k].click()}sync.ready=true}
 document.querySelectorAll('input[name=pack]').forEach(function(i){i.addEventListener('change',sync)});
 var op=$('#oPack');if(op)op.addEventListener('change',function(){var r=document.querySelector('input[name=pack][value='+op.value+']');if(r){r.checked=true;sync()}});
 sync();
@@ -191,7 +191,7 @@ def product_body(h1_tag='h1'):
         rs(round(p / j)), rs(p), rs(MRP * j)) for n, (i, l, j, p) in enumerate(PACKS))
     opts = ''.join('<option value="%s">%s · %s</option>' % (i, l, rs(p)) for i, l, j, p in PACKS)
     p1 = PACKS[0]
-    tiles = [pic('cxe-jars', 'Cream X Emirates CXE Glow Restoring Face Crème 30 ml jars', True), pic('cxe-new-pack', 'New pink CXE Glow Restoring Face Crème pack'), pic('cxe-old-pack', 'Old white Cream X Emirates pack'), '<div class="tile"><div><b style="font-size:1.4rem">Night</b><span><br>Massage in, add a thin overnight layer</span></div></div>']
+    tiles = [pic('cxe-jars', 'Cream X Emirates CXE Glow Restoring Face Crème 30 ml jars', True), pic('cxe-new-pack', 'New pink CXE Glow Restoring Face Crème pack'), pic('cxe-old-pack', 'Old white Cream X Emirates pack'), pic('cxe-pack-2', 'CXE Glow Restoring Face Crème pack of 2 for ₹1,699'), ]
     thumbs = ''.join('<button type="button" aria-label="Image %d" aria-current="%s">%s</button>' % (n + 1, 'true' if n == 0 else 'false', t) for n, t in enumerate(tiles))
     return ('''<div class="wrap"><p class="crumb"><a href="/">Home</a> › Face cream</p>
 <div class="pdp"><div><div class="gal-main">%s</div><div class="gal-thumbs">%s</div></div>
