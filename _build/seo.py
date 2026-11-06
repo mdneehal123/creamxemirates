@@ -132,10 +132,15 @@ def build_all(B, sch, title, desc):
     layout, write, faq_html, faq_ld, simple, product_body, ROOT, os = (B[k] for k in ('layout', 'write', 'faq_html', 'faq_ld', 'simple', 'product_body', 'ROOT', 'os'))
     G = guides(None, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, B['PREPAID_OFF'], B['COD_FEE'], {k: v['cmp'] for k, v in B['PACK_INFO'].items()})
     L = local_pages(rs, PACKS, MRP)
+    import seo2
+    G = G + seo2.guides2(rs, PACKS, B['PREPAID_OFF'], B['COD_FEE'], WA, WA_SHOW)
+    L = L + seo2.locals2(rs, PACKS)
     p1 = PACKS[0][3]
     short = lambda g: g['title'].split(':')[0]
     glinks = ''.join('<li><a href="/%s/">%s</a></li>' % (g['slug'], html.escape(short(g))) for g in G)
-    hre = ''.join('<link rel="alternate" hreflang="%s" href="%s%s">' % (l['code'], SITE, l['path']) for l in L) + '<link rel="alternate" hreflang="en-IN" href="%s/"><link rel="alternate" hreflang="x-default" href="%s/">' % (SITE, SITE)
+    def cluster(en):
+        return ''.join('<link rel="alternate" hreflang="%s" href="%s%s">' % (l['code'], SITE, l['path']) for l in L if l.get('en', '/') == en) + '<link rel="alternate" hreflang="en-IN" href="%s%s"><link rel="alternate" hreflang="x-default" href="%s%s">' % (SITE, en, SITE, en)
+    hre = cluster('/')
     sch = sch + [{'@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Cream X Emirates online store (independent seller)', 'url': SITE + '/', 'inLanguage': 'en-IN'}]
     write('/', layout('/', title, desc, product_body('h1').replace('@@GUIDES@@', glinks), sch, extra=hre))
     card = '<div class="pcard"><img src="/assets/img/cxe-new-pack.jpg" alt="CXE Glow Restoring Face Crème" width="84" height="84" loading="lazy"><div class="t"><b>%s, %s</b><span class="muted">%s · free delivery · COD</span></div><a class="btn shine" href="/#order">Buy now</a></div>' % (html.escape(PRODUCT), SIZE, rs(p1))
@@ -152,14 +157,14 @@ def build_all(B, sch, title, desc):
               {'@context': 'https://schema.org', '@type': 'BreadcrumbList', 'itemListElement': [
                   {'@type': 'ListItem', 'position': 1, 'name': 'Home', 'item': SITE + '/'}, {'@type': 'ListItem', 'position': 2, 'name': 'Guides', 'item': SITE + '/guides/'},
                   {'@type': 'ListItem', 'position': 3, 'name': g['short'], 'item': SITE + path}]}]
-        write(path, layout(path, g['seo'], g['desc'], body, sc))
+        write(path, layout(path, g['seo'], g['desc'], body, sc, extra=cluster(path) if any(l.get('en') == path for l in L) else ''))
     for l in L:
-        body = '<section class="band" style="border:0"><div class="wrap prose"><p class="crumb"><a href="/">Home</a> › %s</p><h1>%s</h1>%s%s<h2>FAQ</h2>%s<p class="meta"><a href="/" lang="en">Read in English</a></p></div></section>%s' % (
-            l['lang'].upper(), html.escape(l['h1']), card, l['body'], faq_html(l['faq']), sticky)
-        write(l['path'], layout(l['path'], l['title'], l['desc'], body, [faq_ld(l['faq'])], lang=l['code'], extra=hre))
+        body = '<section class="band" style="border:0"><div class="wrap prose"><p class="crumb"><a href="/">Home</a> › %s</p><h1>%s</h1>%s%s<h2>FAQ</h2>%s<p class="meta"><a href="%s" lang="en">Read in English</a></p></div></section>%s' % (
+            l['lang'].upper(), html.escape(l['h1']), card, l['body'], faq_html(l['faq']), l.get('en', '/'), sticky)
+        write(l['path'], layout(l['path'], l['title'], l['desc'], body, [faq_ld(l['faq'])], lang=l['code'], extra=cluster(l.get('en', '/'))))
     simple('/guides/', 'Cream X Emirates Guides: Price, How to Use, Side Effects, Results',
            'All Cream X Emirates guides: price, how to use, side effects, honest review, results timeline and how to spot a fake pack.', 'Guides',
-           '<ul class="glist">%s</ul><p>Also in <a href="/ml/cream-x-emirates/" lang="ml">മലയാളം</a> · <a href="/hi/cream-x-emirates/" lang="hi">हिंदी</a></p>' % ''.join('<li><a href="/%s/">%s</a></li>' % (g['slug'], html.escape(g['title'])) for g in G))
+           ('<ul class="glist">%s</ul>' % ''.join('<li><a href="/%s/">%s</a></li>' % (g['slug'], html.escape(g['title'])) for g in G)) + '<h2>Other languages</h2><ul class="glist">' + ''.join('<li><a href="%s" lang="%s">%s</a></li>' % (l['path'], l['lang'], html.escape(l['h1'])) for l in L) + '</ul>')
     more = '; '.join('%s %s' % (lb, rs(p)) for i, lb, j, p in PACKS[1:])
     pages = '\n'.join('- %s: %s/%s/' % (short(g), SITE, g['slug']) for g in G)
     open(os.path.join(ROOT, 'llms.txt'), 'w').write('\n'.join([

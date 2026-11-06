@@ -14,6 +14,8 @@ WA_SHOW = '+91 99808 81230'
 EMAIL = ''                               # optional support email
 PRODUCT = 'Cream X Emirates Glow Restoring Face Crème'
 SIZE = '30 ml'
+GOOGLE_VERIFY = ''                       # Search Console HTML-tag code (content="..."), if not verifying by DNS
+BING_VERIFY = ''                         # Bing Webmaster msvalidate.01 code
 COD_FEE = 100                            # extra charge for Cash on Delivery; 0 turns it off
 PREPAID_OFF = 50                         # extra discount for paying online (Razorpay); 0 turns it off
 MRP = 2200  # MRP of one new pink jar (crossed-out price)
@@ -196,7 +198,7 @@ def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en
     return ('''<!DOCTYPE html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s"><meta name="robots" content="%s">
 <meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
-<meta name="theme-color" content="#8a2d52"><meta property="og:locale" content="en_IN"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">%s%s</head><body>
+<meta name="theme-color" content="#8a2d52">@@VERIFY@@<meta property="og:locale" content="en_IN"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">%s%s</head><body>
 <div class="top">@@TOPBAR@@</div>
 <header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 ml · Free delivery in India</small></a>
 <nav><a class="hide-m" href="/#how-to-use">How to use</a><a class="hide-m" href="/guides/">Guides</a><a class="hide-m" href="/faq/">FAQ</a><a class="hide-m" href="/review/">Reviews</a><a href="https://wa.me/%s" rel="noopener">WhatsApp</a></nav></div></header>
@@ -209,7 +211,7 @@ def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en
 <script>window.STORE=%s</script><script src="/assets/site.js" defer></script></body></html>''' % (
         lang, html.escape(title), html.escape(desc), can, robots, html.escape(title), html.escape(desc), can, SITE, ld, extra,
         WA, body, html.escape(OWNER), html.escape(STORE), html.escape(ADDR), WA, WA_SHOW,
-        (' · <a href="mailto:%s">%s</a>' % (EMAIL, EMAIL)) if EMAIL else '', '', html.escape(PRODUCT), html.escape(OWNER), datetime.date.today().year, html.escape(OWNER), WA, __import__('urllib.parse').parse.quote('Hi, I have a question about %s (%s).' % (PRODUCT, SIZE)), cfg)).replace('@@TOPBAR@@', ('Extra %s off when you pay online · Free delivery across India' % rs(PREPAID_OFF)) if PREPAID_OFF else 'Free delivery across India · Pay online or Cash on Delivery')
+        (' · <a href="mailto:%s">%s</a>' % (EMAIL, EMAIL)) if EMAIL else '', '', html.escape(PRODUCT), html.escape(OWNER), datetime.date.today().year, html.escape(OWNER), WA, __import__('urllib.parse').parse.quote('Hi, I have a question about %s (%s).' % (PRODUCT, SIZE)), cfg)).replace('@@VERIFY@@', (('<meta name="google-site-verification" content="%s">' % GOOGLE_VERIFY) if GOOGLE_VERIFY else '') + (('<meta name="msvalidate.01" content="%s">' % BING_VERIFY) if BING_VERIFY else '')).replace('@@TOPBAR@@', ('Extra %s off when you pay online · Free delivery across India' % rs(PREPAID_OFF)) if PREPAID_OFF else 'Free delivery across India · Pay online or Cash on Delivery')
 
 def write(path, doc):
     d = os.path.join(ROOT, path.strip('/'))
@@ -224,13 +226,14 @@ def faq_ld(items):
 
 def product_ld():
     p1 = PACKS[0]
+    SHIP = {'@type': 'OfferShippingDetails', 'shippingRate': {'@type': 'MonetaryAmount', 'value': '0', 'currency': 'INR'}, 'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'IN'},
+                                           'deliveryTime': {'@type': 'ShippingDeliveryTime', 'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 1, 'maxValue': 2, 'unitCode': 'DAY'}, 'transitTime': {'@type': 'QuantitativeValue', 'minValue': 2, 'maxValue': 5, 'unitCode': 'DAY'}}}
+    RET = {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'IN', 'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow', 'merchantReturnDays': 7, 'returnMethod': 'https://schema.org/ReturnByMail', 'returnFees': 'https://schema.org/FreeReturn'}
     return {'@context': 'https://schema.org', '@type': 'Product', 'name': '%s %s' % (PRODUCT, SIZE), 'brand': {'@type': 'Brand', 'name': 'Cream X Emirates'},
             'description': 'Cream X Emirates (CXE) Glow Restoring Face Crème, %s: brightens, deeply hydrates, improves skin texture, nourishes and repairs. Sold by %s, an independent seller in India.' % (SIZE, OWNER), 'image': [SITE + '/assets/img/cxe-jars.jpg', SITE + '/assets/img/cxe-new-pack.jpg', SITE + '/assets/og.png'], 'url': SITE + '/', 'sku': 'CXE-30ML',
-            'offers': {'@type': 'Offer', 'price': str(p1[3]), 'priceCurrency': 'INR', 'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': SITE + '/',
-                       'seller': {'@type': 'Organization', 'name': OWNER},
-                       'shippingDetails': {'@type': 'OfferShippingDetails', 'shippingRate': {'@type': 'MonetaryAmount', 'value': '0', 'currency': 'INR'}, 'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'IN'},
-                                           'deliveryTime': {'@type': 'ShippingDeliveryTime', 'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 1, 'maxValue': 2, 'unitCode': 'DAY'}, 'transitTime': {'@type': 'QuantitativeValue', 'minValue': 2, 'maxValue': 5, 'unitCode': 'DAY'}}},
-                       'hasMerchantReturnPolicy': {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'IN', 'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow', 'merchantReturnDays': 7, 'returnMethod': 'https://schema.org/ReturnByMail', 'returnFees': 'https://schema.org/FreeReturn'}}}
+            'offers': [{'@type': 'Offer', 'name': l, 'price': str(pr), 'priceCurrency': 'INR', 'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': SITE + '/',
+                        'sku': 'CXE-30ML-' + i, 'seller': {'@type': 'Organization', 'name': OWNER}, 'shippingDetails': SHIP, 'hasMerchantReturnPolicy': RET}
+                       for i, l, j, pr in PACKS]}
 
 def pic(name, alt, eager=False):
     return '<picture><source srcset="/assets/img/%s.webp" type="image/webp"><img src="/assets/img/%s.jpg" alt="%s" width="900" height="900" %s></picture>' % (name, name, alt, 'fetchpriority="high"' if eager else 'loading="lazy"')
