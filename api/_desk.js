@@ -28,7 +28,7 @@ async function push({ ref, c, pack, total, paid, payId, note, courier, awb }) {
     ref, src: 'web', site: CFG.site, brand: 'cx', pay: paid ? 'upi' : 'cod', paid: Boolean(paid), payId: payId || '',
     total, sub: pack.price, disc: Math.max(0, pack.price - total), coupon: '', courier: courier || '', awb: awb || '', note: note || '',
     name: c.name, phone: c.phone, email: '', house: c.address, area: c.city, landmark: '', pin: c.pin, city: c.city, state: c.state || '',
-    items: [[pack.desk, CFG.product + ' ' + CFG.size + ' · ' + pack.label, 1, pack.price]]
+    items: [[pack.desk, pack.test ? pack.label : CFG.product + ' ' + CFG.size + ' · ' + pack.label, 1, pack.price]]
   };
   try {
     const r = await fetch(deskUrl() + '/api/web-order', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-web-order-key': key }, body: JSON.stringify(body) });

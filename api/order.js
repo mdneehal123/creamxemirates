@@ -13,6 +13,7 @@ module.exports = async (req, res) => {
   if (b.website) return res.status(200).json({ ok: true, ref: 'CX' }); // hidden field: bots fill it, people don't
   const pack = D.packById(b.pack), c = D.customer(b);
   if (!pack || !c) return res.status(400).json({ ok: false, error: 'invalid_details' });
+  if (pack.test) return res.status(400).json({ ok: false, error: 'test_is_prepaid_only' }); // never book a courier for a test
   const ref = D.newRef(b.ref);
   const total = pack.price + (D.CFG.codFee || 0); // pack price + COD charge
 

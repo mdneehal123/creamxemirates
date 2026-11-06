@@ -25,6 +25,14 @@
    "jars": 1,
    "price": 749,
    "desk": "cx3"
+  },
+  {
+   "id": "t1",
+   "label": "TEST ORDER ₹1 (do not ship)",
+   "jars": 1,
+   "price": 1,
+   "desk": "own-test",
+   "test": true
   }
  ]
 }

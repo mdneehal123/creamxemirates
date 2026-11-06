@@ -23,6 +23,8 @@ PACKS = [  # (id, label, jars, price): the options on the page, in order
     ('p2', '2 new pink jars', 2, 1850),
     ('o1', '1 old white jar', 1, 749),
 ]
+TEST_PACK = ('t1', 'TEST ORDER ₹1 (do not ship)', 1, 1)   # secret test page only; set TEST_SLUG = '' to remove
+TEST_SLUG = 'test-order-2b9ed7'
 PACK_INFO = {  # line under each option, badge, photo shown when chosen (index in the gallery), compare-at price (crossed out; None = none)
     'p1': {'sub': 'New CXE pink pack · MRP ₹2,200', 'tag': '50% off', 'img': 1, 'cmp': 2200},
     'p2': {'sub': '₹925 per jar · MRP ₹4,400', 'tag': 'Best value', 'img': 3, 'cmp': 4400},
@@ -187,10 +189,10 @@ FAQ = [
     ('Do I need a patch test?', 'Yes, for any new face cream. Apply a little behind the ear or on the jawline for 24 hours before using it on the whole face.'),
 ]
 
-def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en-IN', extra=''):
+def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en-IN', extra='', cfg_over=None):
     can = SITE + path
     ld = ''.join('<script type="application/ld+json">%s</script>' % json.dumps(x, ensure_ascii=False) for x in (schema or []))
-    cfg = json.dumps({'wa': WA, 'off': PREPAID_OFF, 'cod': COD_FEE, 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'cmp': PACK_INFO[i]['cmp'], 'img': PACK_INFO[i]['img']} for i, l, j, p in PACKS]}, ensure_ascii=False)
+    cfg = cfg_over or json.dumps({'wa': WA, 'off': PREPAID_OFF, 'cod': COD_FEE, 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'cmp': PACK_INFO[i]['cmp'], 'img': PACK_INFO[i]['img']} for i, l, j, p in PACKS]}, ensure_ascii=False)
     return ('''<!DOCTYPE html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s"><meta name="robots" content="%s">
 <meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
@@ -290,7 +292,7 @@ def simple(path, title, desc, h1, inner, schema=None):
 def build():
     os.makedirs(os.path.join(ROOT, 'assets'), exist_ok=True)
     os.makedirs(os.path.join(ROOT, 'api'), exist_ok=True)
-    open(os.path.join(ROOT, 'api/_packs.json'), 'w').write(json.dumps({'site': SITE.split('//')[-1], 'prepaidOff': PREPAID_OFF, 'codFee': COD_FEE, 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'desk': 'cx%d' % (n + 1)} for n, (i, l, j, p) in enumerate(PACKS)]}, ensure_ascii=False, indent=1))
+    open(os.path.join(ROOT, 'api/_packs.json'), 'w').write(json.dumps({'site': SITE.split('//')[-1], 'prepaidOff': PREPAID_OFF, 'codFee': COD_FEE, 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'desk': 'cx%d' % (n + 1)} for n, (i, l, j, p) in enumerate(PACKS)] + ([{'id': TEST_PACK[0], 'label': TEST_PACK[1], 'jars': 1, 'price': TEST_PACK[3], 'desk': 'own-test', 'test': True}] if TEST_SLUG else [])}, ensure_ascii=False, indent=1))
     open(os.path.join(ROOT, 'assets/site.css'), 'w').write(CSS)
     open(os.path.join(ROOT, 'assets/site.js'), 'w').write(JS)
     open(os.path.join(ROOT, 'assets/jar.svg'), 'w').write(JAR)
@@ -322,6 +324,17 @@ def build():
 <label style="display:flex;gap:8px;align-items:flex-start;font-weight:400"><input type="checkbox" id="rvOk" style="width:auto;margin-top:5px"> You may show my review on the website with my first name and city.</label>
 <button class="btn" id="rvGo" type="button">Send review on WhatsApp</button></form>
 <h2 style="margin-top:28px">Review policy</h2><ul><li>Real customers only, shown with permission.</li><li>No paid reviews, no discounts for good ratings.</li><li>We show mixed reviews too.</li></ul>''')
+    if TEST_SLUG:
+        tcfg = json.dumps({'wa': WA, 'off': 0, 'cod': 0, 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': TEST_PACK[0], 'label': TEST_PACK[1], 'jars': 1, 'price': TEST_PACK[3], 'cmp': None, 'img': 0}]}, ensure_ascii=False)
+        tbody = '''<section class="band" style="border:0"><div class="wrap prose"><h1>Test order: ₹1</h1><p class="note">Private test page. Pays ₹1 through Razorpay so you can check payments and the Order Desk. It is marked TEST ORDER: do not ship.</p>
+<input type="radio" name="pack" value="t1" checked hidden>
+<form class="order" id="orderForm" novalidate><select name="pack" id="oPack" hidden><option value="t1">Test ₹1</option></select>
+<label>Full name<input name="name" autocomplete="name"></label><label>Mobile number<input name="phone" type="tel" inputmode="numeric"></label>
+<label>Full address<textarea name="address" rows="2"></textarea></label><div class="two"><label>City<input name="city"></label><label>Pincode<input name="pin" inputmode="numeric" maxlength="6"></label></div>
+<fieldset class="paysel"><legend>Payment</legend><label class="pay"><input type="radio" name="paym" value="online" checked><span><b>Pay online</b><small>Razorpay</small></span><b>₹1</b></label></fieldset>
+<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
+<p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit" id="oGo">Pay ₹1 securely</button></form><div id="oDone" class="card" hidden></div></div></section>'''
+        write('/%s/' % TEST_SLUG, layout('/%s/' % TEST_SLUG, 'Test order', 'Private test page.', tbody, robots='noindex,nofollow', cfg_over=tcfg))
     urls = ['/'] + extra_urls + ['/faq/', '/review/', '/shipping-policy/', '/refund-policy/', '/privacy-policy/', '/terms/', '/contact/']
     open(os.path.join(ROOT, 'sitemap.xml'), 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">%s</urlset>\n' % ''.join('<url><loc>%s%s</loc><lastmod>%s</lastmod></url>' % (SITE, u, TODAY) for u in urls))
     open(os.path.join(ROOT, 'robots.txt'), 'w').write(''.join('User-agent: %s\nAllow: /\n\n' % b for b in ['*', 'Googlebot', 'Bingbot', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'PerplexityBot', 'ClaudeBot', 'Claude-SearchBot', 'Google-Extended', 'Applebot-Extended']) + 'Sitemap: %s/sitemap.xml\n' % SITE)
