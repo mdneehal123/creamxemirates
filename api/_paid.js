@@ -15,7 +15,7 @@ async function savePaid(orderId, paymentId, via) {
   if (confirmed && charged !== expected) warn.push('⚠ paid ₹' + charged + ', price is ₹' + expected);
   const ref = D.newRef(n.ref);
   const r = await D.push({ ref, c, pack, total: charged, paid: confirmed, payId: paymentId,
-    note: ['PREPAID via Razorpay' + (p && p.method ? ' (' + p.method + ')' : '') + ' · ' + paymentId + ' · ' + orderId + ' · ' + pack.label + ' · saved by ' + via].concat(warn).join(' · ') });
+    note: ['PREPAID · OWN LABEL: print the label from Order Desk and ship it yourself (not booked with Delhivery)', 'Razorpay' + (p && p.method ? ' (' + p.method + ')' : '') + ' · ' + paymentId + ' · ' + orderId + ' · ' + pack.label + ' · saved by ' + via].concat(warn).join(' · ') });
   if (!r.ok) console.error('PAID ORDER NOT SAVED TO DESK', ref, orderId, paymentId, r.error);
   return { ok: true, saved: r.ok, ref };
 }

@@ -14,10 +14,13 @@ Static site + 4 Vercel functions. Independent seller store for CXE Glow Restorin
 | `RAZORPAY_KEY_SECRET` | Razorpay key secret |
 | `RAZORPAY_WEBHOOK_SECRET` | Secret you type when adding the webhook below |
 | `WEB_ORDER_KEY` | Same value as in the GlutaNex Vercel project (sends orders to the Order Desk) |
+| `DELHIVERY_TOKEN` | Same as GlutaNex (books COD parcels) |
+| `DELHIVERY_PICKUP` | Same as GlutaNex (pickup name exactly as in Delhivery) |
 
 Razorpay webhook: Dashboard > Webhooks > Add: URL `https://trycreamxemirates.in/api/razorpay-webhook`, event `payment.captured`.
 
 ## Order flow
 - Pay online: `/api/create-order` → Razorpay checkout → `/api/verify` (and the webhook as backup) → Order Desk as PAID.
-- Cash on Delivery: `/api/order` → Order Desk as COD. If saving fails, the customer gets a ready-to-send WhatsApp message.
+- Cash on Delivery: `/api/order` → Delhivery pincode check (no COD there: the page asks to pay online) → booked with Delhivery → Order Desk as COD with the AWB. Booking problems are flagged in the order note.
+- Prepaid orders are NOT booked with Delhivery: the Order Desk note says OWN LABEL (print the label from the Order Desk).
 - Orders land in the Order Desk (skinday.shop) under the brand "Cream X Emirates" (cx).
