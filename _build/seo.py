@@ -138,7 +138,7 @@ def build_all(B, sch, title, desc):
     hre = ''.join('<link rel="alternate" hreflang="%s" href="%s%s">' % (l['code'], SITE, l['path']) for l in L) + '<link rel="alternate" hreflang="en-IN" href="%s/"><link rel="alternate" hreflang="x-default" href="%s/">' % (SITE, SITE)
     sch = sch + [{'@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Cream X Emirates online store (independent seller)', 'url': SITE + '/', 'inLanguage': 'en-IN'}]
     write('/', layout('/', title, desc, product_body('h1').replace('@@GUIDES@@', glinks), sch, extra=hre))
-    card = '<div class="pcard"><img src="/assets/img/cxe-new-pack.jpg" alt="CXE Glow Restoring Face Crème" width="84" height="84" loading="lazy"><div class="t"><b>%s, %s</b><span class="muted">%s · free delivery · COD</span></div><a class="btn" href="/#order">Buy now</a></div>' % (html.escape(PRODUCT), SIZE, rs(p1))
+    card = '<div class="pcard"><img src="/assets/img/cxe-new-pack.jpg" alt="CXE Glow Restoring Face Crème" width="84" height="84" loading="lazy"><div class="t"><b>%s, %s</b><span class="muted">%s · free delivery · COD</span></div><a class="btn shine" href="/#order">Buy now</a></div>' % (html.escape(PRODUCT), SIZE, rs(p1))
     sticky = '<div class="sticky show"><div class="p"><b>%s</b><s>%s</s></div><a class="btn" href="/#order">Buy now</a></div>' % (rs(p1), rs(MRP))
     for g in G:
         path = '/%s/' % g['slug']

@@ -81,7 +81,24 @@ footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-
 .sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px;display:none;align-items:center;gap:12px;z-index:30;box-shadow:0 -6px 20px rgba(0,0,0,.06)}
 .sticky .p{flex:1;line-height:1.2}.sticky .p b{display:block;font-size:1.1rem}.sticky .p s{font-size:.8rem;color:var(--muted)}@media(max-width:860px){.sticky.show{display:flex}}
 .prose{max-width:760px}.prose ul{padding-left:1.2em}
-.pack .l .tag{color:#fff}.online{background:#eef8f2;border:1px solid #cfe9da;border-radius:12px;padding:10px 12px;margin:0 0 6px;font-size:.95rem}.online span{color:var(--ok);font-size:.85rem;display:block}
+.pack .l .tag{color:#fff}
+/* attention animations: gentle, and off for people who ask for less motion */
+@keyframes shine{0%{transform:translateX(-120%) skewX(-20deg)}55%,100%{transform:translateX(260%) skewX(-20deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(31,122,77,0)}50%{box-shadow:0 0 0 6px rgba(31,122,77,.14)}}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(184,69,111,.55)}70%{box-shadow:0 0 0 14px rgba(184,69,111,0)}100%{box-shadow:0 0 0 0 rgba(184,69,111,0)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes topshim{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes blinkdot{0%,100%{opacity:1}50%{opacity:.25}}
+.btn.shine{position:relative;overflow:hidden}.btn.shine:after{content:'';position:absolute;top:0;left:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);animation:shine 3.2s ease-in-out infinite}
+.online{animation:glow 2.6s ease-in-out infinite}.online b{color:var(--ok)}
+.pay .tag,.save,.pack .tag{display:inline-block;animation:pulse 1.8s ease-in-out infinite}
+.top{background:linear-gradient(90deg,var(--rose-d) 0%,#c2557f 25%,var(--rose-d) 50%,#c2557f 75%,var(--rose-d) 100%);background-size:200% 100%;animation:topshim 6s linear infinite}
+.top:before{content:'●';color:#ffd36b;margin-right:6px;animation:blinkdot 1.4s ease-in-out infinite;display:inline-block}
+.gal-main>picture img{animation:floaty 5s ease-in-out infinite}
+.sticky .btn{animation:ring 2s ease-out infinite}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important}}
+.online{background:#eef8f2;border:1px solid #cfe9da;border-radius:12px;padding:10px 12px;margin:0 0 6px;font-size:.95rem}.online span{color:var(--ok);font-size:.85rem;display:block}
 .linkbtn{background:none;border:0;color:var(--rose-d);text-decoration:underline;font:inherit;cursor:pointer;padding:0}
 .paysel{border:0;padding:0;margin:0;display:grid;gap:8px}.paysel legend{font-weight:600;font-size:.9rem;margin-bottom:4px}.pay{display:flex!important;grid-template-columns:none!important;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#fff;cursor:pointer}.pay input{width:18px!important;height:18px;accent-color:var(--rose)}.pay span{flex:1;font-weight:400}.pay small{display:block;color:var(--muted);font-size:.8rem}.pay:has(input:checked){border-color:var(--rose);background:#fff6f9}.pay .tag{color:#fff}
 .sticky .p small{display:block;font-size:.72rem;color:var(--ok)}.glist{list-style:none;padding:0;margin:0}.glist li{border-bottom:1px solid var(--line)}.glist a{display:block;padding:12px 0;text-decoration:none;font-weight:600}.glist a:after{content:' ›';color:var(--rose)}
@@ -218,7 +235,7 @@ def product_body(h1_tag='h1'):
 <p class="muted" style="margin:0">For a brighter, more even-looking, softer face, with a simple night routine</p>
 <div class="price"><b data-price>%s</b><s data-mrp>%s</s><span class="save" data-save>Save %s</span></div><p class="tax">MRP inclusive of all taxes · free delivery</p><p class="online" id="onl">💳 Pay online: <b data-online>@@ONL@@</b> <span>extra @@OFF@@ off · UPI, cards, net banking</span></p>
 <div class="packs" role="radiogroup" aria-label="Choose a pack">%s</div>
-<div class="ctas"><a class="btn" href="#order" data-pay-go="online">Buy now · Pay online</a><a class="btn ghost" href="#order" data-pay-go="cod">Cash on Delivery</a></div><p class="muted" style="font-size:.85rem;margin:-6px 0 10px;text-align:center">Prefer chat? <button type="button" class="linkbtn" data-wa-order>Order on WhatsApp</button></p>
+<div class="ctas"><a class="btn shine" href="#order" data-pay-go="online">Buy now · Pay online</a><a class="btn ghost" href="#order" data-pay-go="cod">Cash on Delivery</a></div><p class="muted" style="font-size:.85rem;margin:-6px 0 10px;text-align:center">Prefer chat? <button type="button" class="linkbtn" data-wa-order>Order on WhatsApp</button></p>
 <ul class="trust"><li>💳 Secure payment by Razorpay</li><li>💵 Cash on Delivery too</li><li>🚚 Free delivery in India</li><li>↩️ 7-day return on sealed packs</li></ul>
 <p class="eta" style="margin-bottom:6px">📦 Order today, expected delivery <b id="eta">in 3 to 7 business days</b></p><p class="muted" style="font-size:.78rem;margin:0">Sealed, new stock from an independent seller; this is not the brand's official website.</p></div></div></div>
 <section class="band alt" id="details"><div class="wrap"><h2>What it does</h2><p class="muted">The four benefits the brand states for the Glow Restoring Face Crème.</p><div class="feat">
@@ -247,7 +264,7 @@ def product_body(h1_tag='h1'):
 <label>Full address<textarea name="address" rows="3" autocomplete="street-address" required placeholder="House no., street, area, landmark"></textarea></label>
 <div class="two"><label>City<input name="city" autocomplete="address-level2"></label><label>Pincode<input name="pin" inputmode="numeric" maxlength="6" autocomplete="postal-code" required></label></div>
 <fieldset class="paysel"><legend>Payment</legend><label class="pay"><input type="radio" name="paym" value="online" checked><span><b>Pay online <span class="tag">Save @@OFF@@</span></b><small>UPI, cards, net banking, wallets · Razorpay</small></span><b data-online>@@ONL@@</b></label><label class="pay"><input type="radio" name="paym" value="cod"><span><b>Cash on Delivery</b><small>Pay in cash when the parcel arrives</small></span><b data-price>@@P1@@</b></label></fieldset>
-<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block" type="submit" id="oGo">Pay @@ONL@@ securely</button><p class="muted" style="font-size:.78rem;text-align:center;margin:0">🔒 Secured by Razorpay. We never see your card or UPI PIN.</p></form><div id="oDone" class="card" hidden></div></div></section>
+<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block shine" type="submit" id="oGo">Pay @@ONL@@ securely</button><p class="muted" style="font-size:.78rem;text-align:center;margin:0">🔒 Secured by Razorpay. We never see your card or UPI PIN.</p></form><div id="oDone" class="card" hidden></div></div></section>
 <section class="band"><div class="wrap"><h2>Reviews</h2><p>No reviews yet. Bought from us? <a href="/review/">Share an honest review</a>; we publish real reviews only, with the customer's permission.</p></div></section>
 <section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>CXE Glow Restoring Face Crème</td></tr><tr><td>Size</td><td>30 ml jar</td></tr><tr><td>Price</td><td>@@P1@@ (MRP @@MRP@@)</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
 <section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
