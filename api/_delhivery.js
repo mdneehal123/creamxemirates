@@ -44,7 +44,7 @@ async function bookCod({ ref, c, pack, total, product }) {
   const shipment = {
     name: c.name, add: c.address, pin: c.pin, city: c.city, state: c.state || stateFor(c.pin), country: 'India', phone: c.phone, order: ref,
     payment_mode: 'COD', cod_amount: String(total), total_amount: String(total),
-    products_desc: (product + (jars > 1 ? ' x' + jars : '')).slice(0, 200), quantity: String(jars),
+    products_desc: product.slice(0, 200), quantity: String(jars),
     order_date: new Date().toISOString().slice(0, 19).replace('T', ' '), weight: String(Math.round((0.13 * jars + 0.05) * 1000)),
     shipment_length: String(jars > 1 ? 15 : 10), shipment_width: String(jars > 1 ? 12 : 10), shipment_height: '8',
     seller_name: 'Beauty Mart', seller_add: RETURN.add, return_name: RETURN.name, return_add: RETURN.add, return_city: RETURN.city, return_state: RETURN.state,

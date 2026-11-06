@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
     }
     if (!s) warn = '⚠ Delhivery pincode check did not answer. ';
     if (s && s.state && !c.state) c.state = s.state;
-    booked = await bookCod({ ref, c, pack, total, product: D.CFG.product + ' ' + D.CFG.size });
+    booked = await bookCod({ ref, c, pack, total, product: D.CFG.product + ' ' + D.CFG.size + ' · ' + pack.label });
     if (!booked.ok) warn += '⚠ Delhivery booking failed (' + booked.error + '): book it in Delhivery manually. ';
   } else {
     warn = '⚠ Delhivery not connected on the website: book this COD order in Delhivery manually. ';

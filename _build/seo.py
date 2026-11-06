@@ -5,23 +5,23 @@ import html
 
 UPDATED = '2026-11-06'
 
-def guides(P, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW):
-    p1, p2, p3 = PACKS[0][3], PACKS[1][3], PACKS[2][3]
+def guides(P, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, OFF=50, CODF=100):
+    p1, p2, po = PACKS[0][3], PACKS[1][3], PACKS[2][3]
     G = []
 
     G.append(dict(slug='cream-x-emirates-price', short='Price',
-        title='Cream X Emirates Price in India (30 ml): Packs, Offers and COD',
-        seo='Cream X Emirates Price in India: 30 ml, Packs and COD',
-        desc='Cream X Emirates price in India: %s for one 30 ml jar (MRP %s), with 2- and 3-jar packs, free delivery and Cash on Delivery. What affects the price and how to avoid fakes.' % (rs(p1), rs(MRP)),
-        answer='One 30 ml jar of Cream X Emirates is <b>%s</b> here (MRP <s>%s</s>), with <b>free delivery and Cash on Delivery</b> across India. Two jars are %s and three jars are %s.' % (rs(p1), rs(MRP), rs(p2), rs(p3)),
-        body='''<h2>Price by pack</h2><div class="tbl"><table class="spec"><thead><tr><th>Pack</th><th>Price</th><th>MRP</th><th>Per jar</th></tr></thead><tbody>%s</tbody></table></div>
-<figure><img src="/assets/img/cxe-pack-2-offer.jpg" alt="CXE Glow Restoring Face Crème pack of 2: ₹1,699, MRP ₹1,898, save ₹199" width="900" height="1125" loading="lazy" style="width:100%%;max-width:480px;height:auto;border-radius:14px"></figure>
-<h2>What is included</h2><ul><li>Sealed 30 ml jar(s), new stock</li><li>Free delivery anywhere we ship in India</li><li>Cash on Delivery, or UPI if you prefer</li><li>7-day return on sealed, unused packs</li></ul>
-<h2>Why prices differ between sellers</h2><p>The MRP printed on the pack is the maximum anyone can charge. Sellers can sell below it, so you will see small differences. A price far below others is a warning sign: very cheap jars may be old stock, refilled or fake. Read <a href="/original-cream-x-emirates/">how to check an original pack</a>.</p>
-<h2>How long one jar lasts</h2><p>With the brand's night routine (a small amount, then a thin overnight layer), one 30 ml jar usually lasts around 4 to 6 weeks of nightly use. Since visible change takes 8 to 12 weeks, the 2- or 3-jar pack is better value if you plan to continue.</p>''' % ''.join('<tr><td>%s</td><td><b>%s</b></td><td><s>%s</s></td><td>%s</td></tr>' % (l, rs(p), rs(MRP * j), rs(round(p / j))) for i, l, j, p in PACKS),
-        faq=[('What is the MRP of Cream X Emirates 30 ml?', 'The MRP is %s for one 30 ml jar.' % rs(MRP)),
-             ('Is Cash on Delivery available?', 'Yes. You pay in cash when the parcel arrives, with free delivery.'),
-             ('Is there a discount on more than one jar?', 'Yes. Two jars are %s and three jars are %s.' % (rs(p2), rs(p3)))]))
+        title='Cream X Emirates Price in India (30 ml): New Jar, Pack of 2 and Old Jar Offer',
+        seo='Cream X Emirates Price in India: 30 ml Jar, Pack of 2, COD',
+        desc='Cream X Emirates price in India: %s for one new 30 ml jar, %s for two, and %s for the old white jar while stock lasts. %s off when you pay online; free delivery.' % (rs(p1), rs(p2), rs(po), rs(OFF)),
+        answer='One new 30 ml jar of Cream X Emirates (CXE Glow Restoring Face Crème) is <b>%s</b>, two jars are <b>%s</b>, and the <b>old white jar is %s</b> while stock lasts. Pay online and get <b>%s off</b>; Cash on Delivery has a %s charge. Delivery is free across India.' % (rs(p1), rs(p2), rs(po), rs(OFF), rs(CODF)),
+        body='''<h2>Prices</h2><div class="tbl"><table class="spec"><thead><tr><th>Option</th><th>Price</th><th>Pay online</th><th>Cash on Delivery</th></tr></thead><tbody>%s</tbody></table></div>
+<h2>Old white jar or new pink jar?</h2><p>The brand changed its packaging from a white jar to a pink CXE jar and says the formula is the same. We still have some old white jars, sold at a lower clearance price until they run out. Check the expiry date printed on either pack. Read <a href="/original-cream-x-emirates/">old vs new packaging</a>.</p>
+<h2>What is included</h2><ul><li>Sealed 30 ml jar(s), new stock</li><li>Free delivery anywhere we ship in India</li><li>Pay online (UPI, cards, net banking) or Cash on Delivery</li><li>7-day return on sealed, unused packs</li></ul>
+<h2>Why prices differ between sellers</h2><p>The MRP printed on the pack is the maximum anyone can charge, and sellers may sell below it. A price far below others is a warning sign: very cheap jars may be expired, refilled or fake. Read <a href="/original-cream-x-emirates/">how to check an original pack</a>.</p>
+<h2>How long one jar lasts</h2><p>With the brand's night routine (a small amount, then a thin overnight layer), one 30 ml jar usually lasts around 4 to 6 weeks of nightly use. Visible change takes 8 to 12 weeks, so the pack of 2 is better value if you plan to continue.</p>''' % ''.join('<tr><td>%s</td><td><b>%s</b></td><td>%s</td><td>%s</td></tr>' % (l, rs(p), rs(p - OFF), rs(p + CODF)) for i, l, j, p in PACKS),
+        faq=[('What is the price of Cream X Emirates 30 ml?', '%s for one new jar, %s for two, or %s for the old white jar while stock lasts.' % (rs(p1), rs(p2), rs(po))),
+             ('Is Cash on Delivery available?', 'Yes, with a %s COD charge. Paying online is cheaper: %s off.' % (rs(CODF), rs(OFF))),
+             ('Is the old jar the same cream?', 'The brand says the formula is the same; only the packaging changed. Check the expiry date on the pack.')]))
 
     G.append(dict(slug='how-to-use-cream-x-emirates', short='How to use',
         title='How to Use Cream X Emirates: Night Routine, Step by Step',
@@ -74,7 +74,7 @@ def guides(P, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW):
         seo='Original vs Fake Cream X Emirates: How to Check Your Pack',
         desc='How to check if your Cream X Emirates is original: seal, printed batch and expiry, ingredient list, MRP and manufacturer details, texture and smell, and prices that are too low.',
         answer='An original pack is <b>sealed</b>, has a <b>printed batch number, manufacturing and expiry dates, MRP, ingredient list and manufacturer details</b>, and is sold at a sensible price. <b>Do not use</b> a jar that is unsealed, unlabelled or far cheaper than elsewhere.',
-        body='''<h2>Old and new packaging</h2><p>The brand has changed the look: the old <b>white jar</b> was replaced by a <b>pink CXE "Glow Restoring Face Crème" jar</b>, 30 ml. The brand says the formula is the same. Both can be genuine while old stock sells out; check the expiry date on either.</p><figure><img src="/assets/img/cxe-old-vs-new.jpg" alt="Old white Cream X Emirates jar and new pink CXE jar" width="900" height="1125" loading="lazy" style="width:100%%;height:auto;border-radius:14px"><figcaption class="meta">Old (white) and new (pink) packs. Image from the brand.</figcaption></figure>
+        body='''<h2>Old and new packaging</h2><p>The brand has changed the look: the old <b>white jar</b> was replaced by a <b>pink CXE "Glow Restoring Face Crème" jar</b>, 30 ml. The brand says the formula is the same. Both can be genuine while old stock sells out; check the expiry date on either. We sell our remaining old white jars at a lower clearance price.</p><figure><img src="/assets/img/cxe-old-vs-new.jpg" alt="Old white Cream X Emirates jar and new pink CXE jar" width="900" height="1125" loading="lazy" style="width:100%%;height:auto;border-radius:14px"><figcaption class="meta">Old (white) and new (pink) packs. Image from the brand.</figcaption></figure>
 <h2>Checklist when your parcel arrives</h2><ol><li><b>Seal:</b> the jar or box should be sealed and untouched.</li><li><b>Printing:</b> batch number, manufacturing date and expiry date are printed clearly, not handwritten or stickered over.</li>
 <li><b>Label details:</b> MRP, net quantity (30 ml), full ingredient list and the manufacturer or marketer name and address. Indian rules require these on cosmetics.</li>
 <li><b>Price:</b> a price far below other sellers is the most common sign of a fake or old stock.</li><li><b>Texture and smell:</b> if it looks watery, gritty, separated or smells unusual, do not use it.</li></ol>
@@ -107,21 +107,21 @@ def local_pages(rs, PACKS, MRP):
              title='Cream X Emirates വില, ഉപയോഗിക്കേണ്ട വിധം | COD',
              desc='Cream X Emirates 30 ml ഫേസ് ക്രീം: വില %s, ഉപയോഗിക്കേണ്ട വിധം, ആർക്ക് ഉപയോഗിക്കരുത്, സൗജന്യ ഡെലിവറി, ക്യാഷ് ഓൺ ഡെലിവറി.' % rs(p1),
              h1='Cream X Emirates ഫേസ് ക്രീം, 30 ml',
-             body='''<p class="answer">ഒരു 30 ml ജാറിന് <b>%s</b> (MRP <s>%s</s>). ഇന്ത്യയിലെവിടെയും <b>സൗജന്യ ഡെലിവറി</b>, <b>ക്യാഷ് ഓൺ ഡെലിവറി</b> ലഭ്യമാണ്.</p>
+             body='''<p class="answer">ഒരു 30 ml ജാറിന് <b>%s</b> . ഇന്ത്യയിലെവിടെയും <b>സൗജന്യ ഡെലിവറി</b>, <b>ക്യാഷ് ഓൺ ഡെലിവറി</b> ലഭ്യമാണ്.</p>
 <h2>എങ്ങനെ ഉപയോഗിക്കാം</h2><ol><li>ആദ്യം ചെവിക്ക് പിന്നിൽ 24 മണിക്കൂർ പാച്ച് ടെസ്റ്റ് ചെയ്യുക.</li><li>രാത്രി മുഖം കഴുകി ഉണക്കുക.</li><li>കുറച്ച് ക്രീം എടുത്ത് മുഖത്ത് മസാജ് ചെയ്ത് പിടിക്കുന്നതുവരെ തേക്കുക. കണ്ണിനും ചുണ്ടിനും ചുറ്റും വേണ്ട.</li><li>10 മിനിറ്റിന് ശേഷം ഒരു നേർത്ത പാളി കൂടി മാസ്ക് പോലെ പുരട്ടി രാത്രി മുഴുവൻ വയ്ക്കുക.</li><li>രാവിലെ തണുത്ത വെള്ളത്തിൽ കഴുകി സൺസ്ക്രീൻ പുരട്ടുക.</li></ol>
 <h2>ഫലം എപ്പോൾ</h2><p>2–4 ആഴ്ചയിൽ ചർമ്മം മൃദുവാകും. 8–12 ആഴ്ചയിൽ, ദിവസവും സൺസ്ക്രീനോടൊപ്പം, ടാനും അസമമായ നിറവും കുറഞ്ഞതായി തോന്നും. ഫലം ഓരോരുത്തർക്കും വ്യത്യസ്തമാണ്.</p>
 <h2>ആർ ഉപയോഗിക്കരുത്</h2><p>14 വയസ്സിൽ താഴെയുള്ള കുട്ടികൾ, ഗർഭിണികൾ, പ്രായമായവർ എന്നിവർക്ക് ബ്രാൻഡ് ശുപാർശ ചെയ്യുന്നില്ല. പൊള്ളൽ, വീക്കം, ചൊറിച്ചിൽ ഉണ്ടായാൽ നിർത്തി ഡോക്ടറെ കാണുക.</p>
-<p><a class="btn" href="/#order">ഇപ്പോൾ ഓർഡർ ചെയ്യുക · COD</a></p>''' % (rs(p1), rs(MRP)),
+<p><a class="btn" href="/#order">ഇപ്പോൾ ഓർഡർ ചെയ്യുക · COD</a></p>''' % rs(p1),
              faq=[('Cream X Emirates വില എത്ര?', 'ഒരു 30 ml ജാറിന് %s, സൗജന്യ ഡെലിവറിയോടെ.' % rs(p1)), ('ക്യാഷ് ഓൺ ഡെലിവറി ഉണ്ടോ?', 'ഉണ്ട്. പാർസൽ കിട്ടുമ്പോൾ പണം നൽകാം.'), ('എത്ര ദിവസത്തിൽ ഫലം കാണും?', '8–12 ആഴ്ച, ദിവസവും സൺസ്ക്രീനോടൊപ്പം.')]),
         dict(lang='hi', code='hi-IN', path='/hi/cream-x-emirates/', en='/',
              title='Cream X Emirates की कीमत, इस्तेमाल का तरीका | COD',
              desc='Cream X Emirates 30 ml फेस क्रीम: कीमत %s, इस्तेमाल का तरीका, किसे नहीं लगानी चाहिए, फ्री डिलीवरी और कैश ऑन डिलीवरी।' % rs(p1),
              h1='Cream X Emirates फेस क्रीम, 30 ml',
-             body='''<p class="answer">एक 30 ml जार की कीमत <b>%s</b> (MRP <s>%s</s>)। पूरे भारत में <b>फ्री डिलीवरी</b> और <b>कैश ऑन डिलीवरी</b>।</p>
+             body='''<p class="answer">एक 30 ml जार की कीमत <b>%s</b> । पूरे भारत में <b>फ्री डिलीवरी</b> और <b>कैश ऑन डिलीवरी</b>।</p>
 <h2>कैसे इस्तेमाल करें</h2><ol><li>पहले कान के पीछे 24 घंटे पैच टेस्ट करें।</li><li>रात को चेहरा धोकर सुखा लें।</li><li>थोड़ी क्रीम लेकर चेहरे पर मसाज करें जब तक वह समा न जाए। आंखों और होंठों के पास न लगाएं।</li><li>10 मिनट बाद एक पतली परत मास्क की तरह लगाकर रात भर छोड़ दें।</li><li>सुबह ठंडे पानी से धोएं और सनस्क्रीन लगाएं।</li></ol>
 <h2>रिज़ल्ट कब दिखेगा</h2><p>2–4 हफ्तों में त्वचा मुलायम लगती है। 8–12 हफ्तों में, रोज़ सनस्क्रीन के साथ, टैन और असमान रंगत हल्की दिखती है। रिज़ल्ट हर व्यक्ति में अलग होता है।</p>
 <h2>किसे नहीं लगानी चाहिए</h2><p>ब्रांड 14 साल से कम उम्र के बच्चों, गर्भवती महिलाओं और बुज़ुर्गों के लिए इसकी सलाह नहीं देता। जलन, सूजन या खुजली हो तो बंद करें और डॉक्टर को दिखाएं।</p>
-<p><a class="btn" href="/#order">अभी ऑर्डर करें · COD</a></p>''' % (rs(p1), rs(MRP)),
+<p><a class="btn" href="/#order">अभी ऑर्डर करें · COD</a></p>''' % rs(p1),
              faq=[('Cream X Emirates की कीमत कितनी है?', 'एक 30 ml जार %s, फ्री डिलीवरी के साथ।' % rs(p1)), ('क्या कैश ऑन डिलीवरी है?', 'हां। पार्सल मिलने पर नकद भुगतान करें।'), ('कितने दिन में रिज़ल्ट दिखेगा?', '8–12 हफ्ते, रोज़ सनस्क्रीन के साथ।')]),
     ]
 
@@ -130,7 +130,7 @@ def build_all(B, sch, title, desc):
     """Write home (with guides + hreflang), guides, local pages, hub, llms.txt, feed, 404. B = build module globals."""
     rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, SITE, OWNER, ADDR, JAR = (B[k] for k in ('rs', 'MRP', 'PACKS', 'PRODUCT', 'SIZE', 'WA', 'WA_SHOW', 'SITE', 'OWNER', 'ADDR', 'JAR'))
     layout, write, faq_html, faq_ld, simple, product_body, ROOT, os = (B[k] for k in ('layout', 'write', 'faq_html', 'faq_ld', 'simple', 'product_body', 'ROOT', 'os'))
-    G = guides(None, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW)
+    G = guides(None, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, B['PREPAID_OFF'], B['COD_FEE'])
     L = local_pages(rs, PACKS, MRP)
     p1 = PACKS[0][3]
     short = lambda g: g['title'].split(':')[0]
@@ -139,7 +139,7 @@ def build_all(B, sch, title, desc):
     sch = sch + [{'@context': 'https://schema.org', '@type': 'WebSite', 'name': 'Cream X Emirates online store (independent seller)', 'url': SITE + '/', 'inLanguage': 'en-IN'}]
     write('/', layout('/', title, desc, product_body('h1').replace('@@GUIDES@@', glinks), sch, extra=hre))
     card = '<div class="pcard"><img src="/assets/img/cxe-new-pack.jpg" alt="CXE Glow Restoring Face Crème" width="84" height="84" loading="lazy"><div class="t"><b>%s, %s</b><span class="muted">%s · free delivery · COD</span></div><a class="btn shine" href="/#order">Buy now</a></div>' % (html.escape(PRODUCT), SIZE, rs(p1))
-    sticky = '<div class="sticky show"><div class="p"><b>%s</b><s>%s</s></div><a class="btn" href="/#order">Buy now</a></div>' % (rs(p1), rs(MRP))
+    sticky = '<div class="sticky show"><div class="p"><b>%s</b><small>paying online</small></div><a class="btn" href="/#order">Buy now</a></div>' % rs(p1 - B['PREPAID_OFF'])
     for g in G:
         path = '/%s/' % g['slug']
         rel = ''.join('<li><a href="/%s/">%s</a></li>' % (o['slug'], html.escape(short(o))) for o in G if o is not g)
@@ -167,7 +167,7 @@ def build_all(B, sch, title, desc):
         '> Independent Indian online store selling sealed Cream X Emirates Glow Restoring Face Crème (30 ml). Run by %s, %s. Not the official brand website.' % (OWNER, ADDR), '',
         '## Product facts',
         '- Product: Cream X Emirates (CXE) Glow Restoring Face Crème, 30 ml jar',
-        '- Price: %s for 1 jar (MRP %s); %s' % (rs(p1), rs(MRP), more),
+        '- Price: %s for 1 new jar; %s; %s off when paying online; Cash on Delivery has a %s charge' % (rs(p1), more, rs(B['PREPAID_OFF']), rs(B['COD_FEE'])),
         '- Delivery: free across India; Cash on Delivery; packed in 1-2 business days, delivered in 3-7',
         '- Returns: sealed, unused packs within 7 days of delivery',
         '- How to use: at night on a clean face; massage in a small amount; after 10 minutes apply a thin overnight layer; rinse with cold water in the morning; sunscreen daily',
@@ -178,10 +178,10 @@ def build_all(B, sch, title, desc):
         '- Malayalam: %s/ml/cream-x-emirates/' % SITE, '- Hindi: %s/hi/cream-x-emirates/' % SITE, '']))
     items = ''.join(
         '<item><g:id>CXE-30ML-%s</g:id><title>%s %s, %s</title><description>%s, %s. Night face cream. Free delivery in India, Cash on Delivery.</description><link>%s/</link>'
-        '<g:image_link>%s/assets/img/cxe-jars.jpg</g:image_link><g:availability>in_stock</g:availability><g:price>%d.00 INR</g:price><g:sale_price>%d.00 INR</g:sale_price>'
+        '<g:image_link>%s/assets/img/cxe-jars.jpg</g:image_link><g:availability>in_stock</g:availability><g:price>%d.00 INR</g:price>'
         '<g:brand>Cream X Emirates</g:brand><g:condition>new</g:condition><g:identifier_exists>no</g:identifier_exists><g:google_product_category>2740</g:google_product_category>'
         '<g:shipping><g:country>IN</g:country><g:price>0 INR</g:price></g:shipping>%s</item>' % (
-            i, html.escape(PRODUCT), SIZE, lb, html.escape(PRODUCT), SIZE, SITE, SITE, MRP * j, p, ('<g:multipack>%d</g:multipack>' % j) if j > 1 else '')
+            i, html.escape(PRODUCT), SIZE, lb, html.escape(PRODUCT), SIZE, SITE, SITE, p, ('<g:multipack>%d</g:multipack>' % j) if j > 1 else '')
         for i, lb, j, p in PACKS)
     os.makedirs(os.path.join(ROOT, 'feeds'), exist_ok=True)
     open(os.path.join(ROOT, 'feeds/products.xml'), 'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0"><channel><title>Cream X Emirates store</title><link>%s/</link><description>Products</description>%s</channel></rss>\n' % (SITE, items))

@@ -16,12 +16,18 @@ PRODUCT = 'Cream X Emirates Glow Restoring Face Crème'
 SIZE = '30 ml'
 COD_FEE = 100                            # extra charge for Cash on Delivery; 0 turns it off
 PREPAID_OFF = 50                         # extra discount for paying online (Razorpay); 0 turns it off
-MRP = 949                                # TODO: confirm
-PACKS = [  # (id, label, jars, price) -- TODO: confirm prices
-    ('p1', '1 jar', 1, 899),
-    ('p2', '2 jars', 2, 1699),
-    ('p3', '3 jars', 3, 2399),
+MRP = None  # printed MRP of one new jar; None hides the crossed-out MRP until it is confirmed
+#                               # TODO: confirm
+PACKS = [  # (id, label, jars, price): the options on the page, in order
+    ('p1', '1 new pink jar', 1, 1100),
+    ('p2', '2 new pink jars', 2, 1850),
+    ('o1', '1 old white jar', 1, 749),
 ]
+PACK_INFO = {  # line under each option, badge, photo shown when chosen (index in the gallery), compare-at price (crossed out; None = none)
+    'p1': {'sub': 'New CXE pink pack', 'tag': '', 'img': 1, 'cmp': None},
+    'p2': {'sub': '₹925 per jar · save ₹350 vs 2 singles', 'tag': 'Best value', 'img': 3, 'cmp': 2200},
+    'o1': {'sub': 'Old white pack · same formula · clearance', 'tag': 'Clearance', 'img': 2, 'cmp': None},
+}
 # ------------------------------------------------------
 
 def rs(n): return '₹' + format(n, ',')
@@ -119,9 +125,9 @@ JS = r'''(function(){
 var C=window.STORE||{};var $=function(s){return document.querySelector(s)};
 function pack(){var r=document.querySelector('input[name=pack]:checked');return C.packs.filter(function(p){return p.id===(r?r.value:'p1')})[0]}
 function rs(n){return '₹'+n.toLocaleString('en-IN')}
-function sync(){var p=pack();if(!p)return;var mrp=C.mrp*p.jars;document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=rs(p.price)});
-document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=rs(mrp)});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent='Save '+rs(mrp-p.price)});document.querySelectorAll('[data-online]').forEach(function(e){e.textContent=rs(p.price-C.off)});document.querySelectorAll('[data-codprice]').forEach(function(e){e.textContent=rs(p.price+C.cod)});payLabel();
-var o=$('#oPack');if(o)o.value=p.id;var t=document.querySelectorAll('.gal-thumbs button');var k=p.jars===2?3:0;if(t[k]&&sync.ready){t[k].click()}sync.ready=true}
+function sync(){var p=pack();if(!p)return;var mrp=p.cmp||0;document.querySelectorAll('[data-price]').forEach(function(e){e.textContent=rs(p.price)});
+document.querySelectorAll('[data-mrp]').forEach(function(e){e.textContent=mrp>p.price?rs(mrp):''});document.querySelectorAll('[data-save]').forEach(function(e){e.textContent=mrp>p.price?'Save '+rs(mrp-p.price):'';e.hidden=!(mrp>p.price)});document.querySelectorAll('[data-online]').forEach(function(e){e.textContent=rs(p.price-C.off)});document.querySelectorAll('[data-codprice]').forEach(function(e){e.textContent=rs(p.price+C.cod)});payLabel();
+var o=$('#oPack');if(o)o.value=p.id;var t=document.querySelectorAll('.gal-thumbs button');var k=p.img||0;if(t[k]&&sync.ready){t[k].click()}sync.ready=true}
 document.querySelectorAll('input[name=pack]').forEach(function(i){i.addEventListener('change',sync)});
 var op=$('#oPack');if(op)op.addEventListener('change',function(){var r=document.querySelector('input[name=pack][value='+op.value+']');if(r){r.checked=true;sync()}});
 sync();
@@ -184,7 +190,7 @@ FAQ = [
 def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en-IN', extra=''):
     can = SITE + path
     ld = ''.join('<script type="application/ld+json">%s</script>' % json.dumps(x, ensure_ascii=False) for x in (schema or []))
-    cfg = json.dumps({'wa': WA, 'off': PREPAID_OFF, 'cod': COD_FEE, 'product': PRODUCT, 'size': SIZE, 'mrp': MRP, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p} for i, l, j, p in PACKS]}, ensure_ascii=False)
+    cfg = json.dumps({'wa': WA, 'off': PREPAID_OFF, 'cod': COD_FEE, 'product': PRODUCT, 'size': SIZE, 'packs': [{'id': i, 'label': l, 'jars': j, 'price': p, 'cmp': PACK_INFO[i]['cmp'], 'img': PACK_INFO[i]['img']} for i, l, j, p in PACKS]}, ensure_ascii=False)
     return ('''<!DOCTYPE html><html lang="%s"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>%s</title><meta name="description" content="%s"><link rel="canonical" href="%s"><meta name="robots" content="%s">
 <meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
@@ -228,18 +234,18 @@ def pic(name, alt, eager=False):
     return '<picture><source srcset="/assets/img/%s.webp" type="image/webp"><img src="/assets/img/%s.jpg" alt="%s" width="900" height="900" %s></picture>' % (name, name, alt, 'fetchpriority="high"' if eager else 'loading="lazy"')
 
 def product_body(h1_tag='h1'):
-    packs = ''.join('''<label class="pack"><input type="radio" name="pack" value="%s"%s><span class="l"><b>%s%s</b><span>%s per jar</span></span><span class="r"><b>%s</b><s>%s</s></span></label>''' % (
-        i, ' checked' if n == 0 else '', l, ' <span class="tag">Best value</span>' if n == len(PACKS) - 1 else (' <span class="tag">Popular</span>' if n == 1 else ''),
-        rs(round(p / j)), rs(p), rs(MRP * j)) for n, (i, l, j, p) in enumerate(PACKS))
+    packs = ''.join('''<label class="pack"><input type="radio" name="pack" value="%s"%s><span class="l"><b>%s%s</b><span>%s</span></span><span class="r"><b>%s</b>%s</span></label>''' % (
+        i, ' checked' if n == 0 else '', l, (' <span class="tag">%s</span>' % PACK_INFO[i]['tag']) if PACK_INFO[i]['tag'] else '', PACK_INFO[i]['sub'],
+        rs(p), ('<s>%s</s>' % rs(PACK_INFO[i]['cmp'])) if PACK_INFO[i]['cmp'] else '') for n, (i, l, j, p) in enumerate(PACKS))
     opts = ''.join('<option value="%s">%s · %s</option>' % (i, l, rs(p)) for i, l, j, p in PACKS)
     p1 = PACKS[0]
-    tiles = [pic('cxe-jars', 'Cream X Emirates CXE Glow Restoring Face Crème 30 ml jars', True), pic('cxe-new-pack', 'New pink CXE Glow Restoring Face Crème pack'), pic('cxe-old-pack', 'Old white Cream X Emirates pack'), pic('cxe-pack-2', 'CXE Glow Restoring Face Crème pack of 2 for ₹1,699'), ]
+    tiles = [pic('cxe-jars', 'Cream X Emirates CXE Glow Restoring Face Crème 30 ml jars', True), pic('cxe-new-pack', 'New pink CXE Glow Restoring Face Crème pack'), pic('cxe-old-pack', 'Old white Cream X Emirates pack'), pic('cxe-pack-2', 'Two new pink CXE Glow Restoring Face Crème jars, pack of 2'), ]
     thumbs = ''.join('<button type="button" aria-label="Image %d" aria-current="%s">%s</button>' % (n + 1, 'true' if n == 0 else 'false', t) for n, t in enumerate(tiles))
     return ('''<div class="wrap"><p class="crumb"><a href="/">Home</a> › Face cream</p>
 <div class="pdp"><div><div class="gal-main">%s</div><div class="gal-thumbs">%s</div></div>
 <div><span class="seller">New pack · same formula · 30 ml</span><%s>%s, %s</%s>
 <p class="muted" style="margin:0">For a brighter, more even-looking, softer face, with a simple night routine</p>
-<div class="price"><b data-price>%s</b><s data-mrp>%s</s><span class="save" data-save>Save %s</span></div><p class="tax">MRP inclusive of all taxes · free delivery</p><p class="online" id="onl">💳 Pay online: <b data-online>@@ONL@@</b> <span>extra @@OFF@@ off · UPI, cards, net banking</span></p>
+<div class="price"><b data-price>%s</b><s data-mrp></s><span class="save" data-save hidden></span></div><p class="tax">Inclusive of all taxes · free delivery</p><p class="online" id="onl">💳 Pay online: <b data-online>@@ONL@@</b> <span>extra @@OFF@@ off · UPI, cards, net banking</span></p>
 <div class="packs" role="radiogroup" aria-label="Choose a pack">%s</div>
 <div class="ctas"><a class="btn shine" href="#order" data-pay-go="online">Buy now · Pay online</a><a class="btn ghost" href="#order" data-pay-go="cod">Cash on Delivery <small data-codfee>(+@@CODFEE@@)</small></a></div>
 <ul class="trust"><li>💳 Secure payment by Razorpay</li><li>💵 COD available (+@@CODFEE@@)</li><li>🚚 Free delivery in India</li><li>↩️ 7-day return on sealed packs</li></ul>
@@ -272,11 +278,11 @@ def product_body(h1_tag='h1'):
 <fieldset class="paysel"><legend>Payment</legend><label class="pay"><input type="radio" name="paym" value="online" checked><span><b>Pay online <span class="tag">Save @@OFF@@</span></b><small>UPI, cards, net banking, wallets · Razorpay</small></span><b data-online>@@ONL@@</b></label><label class="pay"><input type="radio" name="paym" value="cod"><span><b>Cash on Delivery</b><small>+@@CODFEE@@ COD charge · pay in cash at the door</small></span><b data-codprice>@@CODP@@</b></label></fieldset>
 <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;height:0;width:0;opacity:0"><p class="err" id="oErr" role="alert"></p><button class="btn block shine" type="submit" id="oGo">Pay @@ONL@@ securely</button><p class="muted" style="font-size:.78rem;text-align:center;margin:0">🔒 Secured by Razorpay. We never see your card or UPI PIN.</p></form><div id="oDone" class="card" hidden></div></div></section>
 <section class="band"><div class="wrap"><h2>Reviews</h2><p>No reviews yet. Bought from us? <a href="/review/">Share an honest review</a>; we publish real reviews only, with the customer's permission.</p></div></section>
-<section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>CXE Glow Restoring Face Crème</td></tr><tr><td>Size</td><td>30 ml jar</td></tr><tr><td>Price</td><td>@@P1@@ (MRP @@MRP@@)</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
+<section class="band"><div class="wrap grid2"><div><h2>Quick facts</h2><table class="spec"><tbody><tr><td>Product</td><td>CXE Glow Restoring Face Crème</td></tr><tr><td>Size</td><td>30 ml jar</td></tr><tr><td>Price</td><td>New jar @@P1@@ · 2 jars @@P2@@ · old jar @@PO@@</td></tr><tr><td>Use</td><td>Night, on the face; rinse in the morning</td></tr><tr><td>Results</td><td>Softer in 2 to 4 weeks; more even in 8 to 12 weeks with sunscreen</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, elderly users</td></tr><tr><td>Delivery</td><td>Free, all India, Cash on Delivery</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div><div><h2>Guides</h2><ul class="glist">@@GUIDES@@</ul></div></div></section>
 <section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
-<div class="sticky"><div class="p"><b data-online>@@ONL@@</b><s data-mrp>%s</s><small>paying online</small></div><a class="btn" href="#order" data-pay-go="online">Buy now</a></div>''' % (
-        tiles[0], thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), rs(MRP), rs(MRP - p1[3]), packs,
-        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]), rs(MRP))).replace('@@P1@@', rs(p1[3])).replace('@@MRP@@', rs(MRP)).replace('@@ONL@@', rs(p1[3] - PREPAID_OFF)).replace('@@OFF@@', rs(PREPAID_OFF)).replace('@@CODFEE@@', rs(COD_FEE)).replace('@@CODP@@', rs(p1[3] + COD_FEE))
+<div class="sticky"><div class="p"><b data-online>@@ONL@@</b><small>paying online</small></div><a class="btn" href="#order" data-pay-go="online">Buy now</a></div>''' % (
+        tiles[0], thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), packs,
+        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]))).replace('@@P1@@', rs(p1[3])).replace('@@P2@@', rs(PACKS[1][3])).replace('@@PO@@', rs(PACKS[2][3])).replace('@@ONL@@', rs(p1[3] - PREPAID_OFF)).replace('@@OFF@@', rs(PREPAID_OFF)).replace('@@CODFEE@@', rs(COD_FEE)).replace('@@CODP@@', rs(p1[3] + COD_FEE))
 
 def simple(path, title, desc, h1, inner, schema=None):
     write(path, layout(path, title, desc, '<section class="band" style="border:0"><div class="wrap prose"><p class="crumb"><a href="/">Home</a> › %s</p><h1>%s</h1>%s</div></section>' % (html.escape(h1), html.escape(h1), inner), schema))
