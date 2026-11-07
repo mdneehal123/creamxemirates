@@ -123,6 +123,40 @@ footer .disc{border-top:1px solid #4a3340;margin-top:22px;padding-top:16px;font-
 .tl{list-style:none;padding:0;margin:0;border-left:3px solid var(--rose)}.tl li{padding:0 0 16px 18px;position:relative}.tl li:before{content:'';position:absolute;left:-8px;top:6px;width:13px;height:13px;border-radius:50%;background:var(--rose)}.tl b{display:block}.tl span{color:var(--muted);font-size:.93rem}
 .spec{width:100%;border-collapse:collapse;font-size:.92rem}.spec td{padding:8px 0;border-bottom:1px solid var(--line);vertical-align:top}.spec td:first-child{color:var(--muted);width:40%}.gal-thumbs .tile span{display:none}.gal-thumbs .tile b{font-size:1rem!important}
 @media(max-width:860px){.gal-main{aspect-ratio:1;display:flex;justify-content:center;align-items:center}.gal-main>.tile{width:100%}.gal-thumbs{grid-template-columns:repeat(4,1fr)}}
+
+/* ---- visual upgrade ---- */
+.hero{background:radial-gradient(900px 520px at 12% 18%,#ffd9e6 0,rgba(255,217,230,0) 70%),radial-gradient(800px 600px at 95% 85%,#ffe9d6 0,rgba(255,233,214,0) 70%),linear-gradient(180deg,#fff4f7,#fffaf7);padding-bottom:34px}
+.gal-main{box-shadow:0 30px 60px -28px rgba(138,45,82,.55);border-radius:22px;overflow:hidden}
+.pdp h1{background:linear-gradient(90deg,#5a1733,#b8456f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.price b[data-price]{color:#8a2d52}
+.eyebrow{display:inline-block;font:700 .72rem/1 system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);background:#fde6ee;padding:7px 12px;border-radius:99px;margin-bottom:12px}
+.eyebrow.lt{background:rgba(255,255,255,.16);color:#ffd9e6}
+.ribbon{background:linear-gradient(90deg,#6d1f40,#b8456f 55%,#e0759b);color:#fff}
+.ribbon .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding-top:20px;padding-bottom:20px}
+.ribbon .wrap>div{display:grid;grid-template-columns:44px 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center}
+.ribbon span{grid-row:1/3;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:1.25rem}
+.ribbon b{font-size:.98rem;line-height:1.2}.ribbon small{opacity:.85;font-size:.8rem}
+#details{background:linear-gradient(180deg,#fff,#fff6f9)}
+.feat .card{position:relative;background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px 18px;box-shadow:0 14px 30px -22px rgba(138,45,82,.45);transition:transform .25s,box-shadow .25s}
+.feat .card:hover{transform:translateY(-4px);box-shadow:0 22px 40px -22px rgba(138,45,82,.6)}
+.feat .card b{display:block;font-size:1.05rem;margin-top:12px}
+.ic{display:flex;width:52px;height:52px;border-radius:16px;align-items:center;justify-content:center;font-style:normal;font-size:1.5rem}
+.ic.i1{background:linear-gradient(135deg,#ffd6e3,#ffb3cb)}.ic.i2{background:linear-gradient(135deg,#d9f1ff,#b6e1fb)}.ic.i3{background:linear-gradient(135deg,#fff0cf,#ffdf9a)}.ic.i4{background:linear-gradient(135deg,#dcf7e6,#b5ecc9)}
+.show{background:radial-gradient(700px 400px at 85% 20%,rgba(224,117,155,.45),rgba(0,0,0,0) 70%),linear-gradient(135deg,#3a1022,#6d1f40);color:#fff;padding:54px 0}
+.show .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}
+.show-img img{aspect-ratio:1/1;object-fit:cover;width:100%;height:auto}.show-img{max-width:480px;justify-self:center;border-radius:24px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);transform:rotate(-2deg)}
+.show h2{color:#fff;font-size:clamp(1.6rem,3.8vw,2.4rem)}
+.ticks{list-style:none;padding:0;margin:18px 0 24px;display:grid;gap:10px}
+.ticks li{padding-left:34px;position:relative}.ticks li:before{content:"✓";position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;background:#ffd9e6;color:#6d1f40;font-weight:800;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.btn.light{background:#fff;color:#8a2d52!important;box-shadow:0 10px 30px -10px rgba(255,255,255,.5)}
+#how-to-use{background:linear-gradient(180deg,#fff6f9,#fffaf7)}
+@media(min-width:900px){.steps{grid-template-columns:repeat(5,1fr)}.steps li{padding:56px 16px 18px;border-radius:18px;box-shadow:0 14px 30px -24px rgba(138,45,82,.5)}.steps li:before{top:16px;left:16px;width:32px;height:32px;background:linear-gradient(135deg,#e0759b,#8a2d52)}}
+#order{background:linear-gradient(135deg,#fff0f5,#fff8f1)}
+#order form,#order .ofm{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 26px 50px -30px rgba(138,45,82,.55)}
+footer{background:linear-gradient(180deg,#2b1a22,#1d0f16)}
+.ticks.dark li:before{background:#fde6ee;color:#8a2d52}.ord-img{max-width:340px;border-radius:22px;overflow:hidden;box-shadow:0 26px 50px -30px rgba(138,45,82,.6);margin-top:8px}@media(max-width:820px){.ord-img{display:none}}
+@media(max-width:600px){.feat{grid-template-columns:1fr 1fr!important;gap:10px}.feat .card{padding:14px 12px}.feat .card b{font-size:.95rem}.feat p{font-size:.84rem}.ic{width:42px;height:42px;font-size:1.2rem;border-radius:12px}}
+@media(max-width:820px){.ribbon .wrap{grid-template-columns:1fr 1fr;gap:14px}.show .wrap{grid-template-columns:1fr;gap:26px}.show-img{transform:none}}
 '''
 
 JS = r'''(function(){
@@ -246,7 +280,7 @@ def product_body(h1_tag='h1'):
     p1 = PACKS[0]
     tiles = [pic('cxe-jars', 'Cream X Emirates CXE Glow Restoring Face Crème 30 ml jars', True), pic('cxe-new-pack', 'New pink CXE Glow Restoring Face Crème pack'), pic('cxe-old-pack', 'Old white Cream X Emirates pack'), pic('cxe-pack-2', 'Two new pink CXE Glow Restoring Face Crème jars, pack of 2'), ]
     thumbs = ''.join('<button type="button" aria-label="Image %d" aria-current="%s">%s</button>' % (n + 1, 'true' if n == 0 else 'false', t) for n, t in enumerate(tiles))
-    return ('''<div class="wrap"><p class="crumb"><a href="/">Home</a> › Face cream</p>
+    return ('''<section class="hero"><div class="wrap"><p class="crumb"><a href="/">Home</a> › Face cream</p>
 <div class="pdp"><div><div class="gal-main">%s</div><div class="gal-thumbs">%s</div></div>
 <div><span class="seller">New pack · same formula · 30 ml</span><%s>%s, %s</%s>
 <p class="muted" style="margin:0">For a brighter, more even-looking, softer face, with a simple night routine</p>
@@ -254,12 +288,14 @@ def product_body(h1_tag='h1'):
 <div class="packs" role="radiogroup" aria-label="Choose a pack">%s</div>
 <div class="ctas"><a class="btn shine" href="#order" data-pay-go="online">Buy now · Pay online</a><a class="btn ghost" href="#order" data-pay-go="cod">Cash on Delivery <small data-codfee>(+@@CODFEE@@)</small></a></div>
 <ul class="trust"><li>💳 Secure payment by Razorpay</li><li>💵 COD available (+@@CODFEE@@)</li><li>🚚 Free delivery in India</li><li>↩️ 7-day return on sealed packs</li></ul>
-<p class="eta" style="margin-bottom:6px">📦 Order today, expected delivery <b id="eta">in 3 to 7 business days</b></p><p class="muted" style="font-size:.78rem;margin:0">Sealed, new stock from an independent seller; this is not the brand's official website.</p></div></div></div>
-<section class="band alt" id="details"><div class="wrap"><h2>What it does</h2><p class="muted">The four benefits the brand states for the Glow Restoring Face Crème.</p><div class="feat">
-<div class="card"><b>✨ Brightens skin</b><p>For dull, tired-looking skin; with regular night use and sunscreen, the face looks fresher and more radiant.</p></div>
-<div class="card"><b>💧 Deep hydration</b><p>A rich crème that keeps skin moisturised overnight, so it feels soft and comfortable by morning.</p></div>
-<div class="card"><b>〰️ Improves skin texture</b><p>With regular use, skin feels smoother and looks more even, including tan and uneven patches over 8 to 12 weeks.</p></div>
-<div class="card"><b>🌿 Nourishes and repairs</b><p>Made to nourish the skin while you sleep, as part of a simple night routine.</p></div></div></section>
+<p class="eta" style="margin-bottom:6px">📦 Order today, expected delivery <b id="eta">in 3 to 7 business days</b></p><p class="muted" style="font-size:.78rem;margin:0">Sealed, new stock from an independent seller; this is not the brand's official website.</p></div></div></div></section>
+<div class="ribbon"><div class="wrap"><div><span>🚚</span><b>Free delivery</b><small>All over India</small></div><div><span>💳</span><b>@@OFF@@ off online</b><small>UPI, cards, net banking</small></div><div><span>💵</span><b>Cash on Delivery</b><small>Pay at your door</small></div><div><span>↩️</span><b>7-day returns</b><small>On sealed packs</small></div></div></div>
+<section class="band alt" id="details"><div class="wrap"><span class="eyebrow">Why people love it</span><h2>What it does</h2><p class="muted">The four benefits the brand states for the Glow Restoring Face Crème.</p><div class="feat">
+<div class="card"><i class="ic i1">✨</i><b>Brightens skin</b><p>For dull, tired-looking skin; with regular night use and sunscreen, the face looks fresher and more radiant.</p></div>
+<div class="card"><i class="ic i2">💧</i><b>Deep hydration</b><p>A rich crème that keeps skin moisturised overnight, so it feels soft and comfortable by morning.</p></div>
+<div class="card"><i class="ic i3">〰️</i><b>Improves skin texture</b><p>With regular use, skin feels smoother and looks more even, including tan and uneven patches over 8 to 12 weeks.</p></div>
+<div class="card"><i class="ic i4">🌿</i><b>Nourishes and repairs</b><p>Made to nourish the skin while you sleep, as part of a simple night routine.</p></div></div></section>
+<section class="show"><div class="wrap"><div class="show-img">@@SHOWIMG@@</div><div class="show-txt"><span class="eyebrow lt">New pink pack · same formula</span><h2>One crème. One simple night routine.</h2><ul class="ticks"><li>Rich overnight crème, 30 ml jar</li><li>Softer feel in 2 to 4 weeks</li><li>More even-looking skin in 8 to 12 weeks, with sunscreen</li><li>Sealed, fresh stock with free delivery</li></ul><div class="ctas"><a class="btn light" href="#order" data-pay-go="online">Buy now · @@ONL@@ online</a></div></div></div></section>
 <section class="band"><div class="wrap grid2"><div><h2>What to expect</h2><ol class="tl"><li><b>Week 1 to 2</b><span>Skin adjusts and feels softer. If it feels dry or tingly, use every other night at first.</span></li>
 <li><b>Week 3 to 4</b><span>Smoother feel and a fresher look in the morning.</span></li><li><b>Week 8 to 12</b><span>Tan and uneven patches look lighter, if you wear sunscreen every day.</span></li></ol>
 <p class="muted" style="font-size:.85rem">Results vary from person to person. A face cream does not change your natural skin colour.</p></div>
@@ -267,15 +303,15 @@ def product_body(h1_tag='h1'):
 <tr><td>Product</td><td>%s</td></tr><tr><td>Also called</td><td>CXE crème, Cream X Emirates cream</td></tr><tr><td>Net quantity</td><td>%s</td></tr><tr><td>Type</td><td>Face crème, overnight</td></tr><tr><td>When to use</td><td>Night</td></tr>
 <tr><td>Where</td><td>Face and neck; avoid eyes and lips</td></tr><tr><td>Skin type</td><td>Most adult skin; patch test first</td></tr><tr><td>Not for</td><td>Under 14, pregnancy, breastfeeding or elderly users without a doctor's advice</td></tr>
 <tr><td>Ingredients</td><td>Full list printed on the pack</td></tr><tr><td>Packaging</td><td>New pink jar (replaces the old white jar); same formula</td></tr><tr><td>Delivery</td><td>Free across India, COD available</td></tr></tbody></table></div></div></section>
-<section class="band" id="how-to-use"><div class="wrap"><h2>How to use</h2><p class="muted">Following the brand's directions, with a patch test first and sunscreen in the morning.</p><ol class="steps">
+<section class="band" id="how-to-use"><div class="wrap"><span class="eyebrow">Brand directions</span><h2>How to use</h2><p class="muted">Following the brand's directions, with a patch test first and sunscreen in the morning.</p><ol class="steps">
 <li><b>Patch test first.</b> Apply a little behind the ear or on the jawline and wait 24 hours.</li>
 <li><b>Cleanse.</b> Wash your face well and pat it dry.</li>
 <li><b>Massage in.</b> Take a small amount and massage it into the face until it absorbs. Avoid the eyes and lips.</li>
 <li><b>Wait, then layer.</b> After about 10 minutes, apply a second thin layer like a night mask and leave it on overnight.</li>
 <li><b>Rinse in the morning.</b> Wash off with cold water, then apply SPF 30+ sunscreen. Use nightly.</li></ol>
 <p class="note"><b>Not recommended</b> for children under 14, during pregnancy or breastfeeding, or for elderly users, unless a doctor approves. Do not apply on broken, sunburnt or irritated skin. Stop if you get burning, swelling or a rash, and see a doctor.</p></div></section>
-<section class="band alt" id="order"><div class="wrap grid2"><div><h2>Place your order</h2><p>Pay online to get <b>@@OFF@@ off</b> and faster dispatch: prepaid orders are packed first. Payment is handled securely by Razorpay (UPI, cards, net banking, wallets).</p>
-<p class="muted">Prefer to pay at the door? Cash on Delivery is available with a @@CODFEE@@ COD charge.</p></div>
+<section class="band alt" id="order"><div class="wrap grid2"><div><span class="eyebrow">Fast, secure checkout</span><h2>Place your order</h2><p>Pay online to get <b>@@OFF@@ off</b> and faster dispatch: prepaid orders are packed first. Payment is handled securely by Razorpay (UPI, cards, net banking, wallets).</p>
+<p class="muted">Prefer to pay at the door? Cash on Delivery is available with a @@CODFEE@@ COD charge.</p><ul class="ticks dark"><li>Free delivery all over India</li><li>Prepaid orders packed first</li><li>7-day return on sealed packs</li><li>Help on WhatsApp before and after you order</li></ul><div class="ord-img">@@ORDIMG@@</div></div>
 <form class="order" id="orderForm" novalidate><label>Pack<select name="pack" id="oPack">%s</select></label>
 <label>Full name<input name="name" autocomplete="name" required></label><label>Mobile number<input name="phone" type="tel" inputmode="numeric" autocomplete="tel" required placeholder="10-digit number"></label>
 <label>Full address<textarea name="address" rows="3" autocomplete="street-address" required placeholder="House no., street, area, landmark"></textarea></label>
@@ -287,7 +323,7 @@ def product_body(h1_tag='h1'):
 <section class="band alt"><div class="wrap prose"><h2>Questions</h2>%s<p><a href="/faq/">All questions</a></p></div></section>
 <div class="sticky"><div class="p"><b data-online>@@ONL@@</b><small>paying online</small></div><a class="btn" href="#order" data-pay-go="online">Buy now</a></div>''' % (
         tiles[0], thumbs, h1_tag, html.escape(PRODUCT), SIZE, h1_tag, rs(p1[3]), packs,
-        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]))).replace('@@MRPS@@', rs(PACK_INFO[p1[0]]['cmp']) if PACK_INFO[p1[0]]['cmp'] else '').replace('@@SAVE@@', ('Save ' + rs(PACK_INFO[p1[0]]['cmp'] - p1[3])) if PACK_INFO[p1[0]]['cmp'] else '').replace('@@P1@@', rs(p1[3])).replace('@@P2@@', rs(PACKS[1][3])).replace('@@PO@@', rs(PACKS[2][3])).replace('@@ONL@@', rs(p1[3] - PREPAID_OFF)).replace('@@OFF@@', rs(PREPAID_OFF)).replace('@@CODFEE@@', rs(COD_FEE)).replace('@@CODP@@', rs(p1[3] + COD_FEE))
+        html.escape(PRODUCT), SIZE, opts, faq_html(FAQ[:5]))).replace('@@MRPS@@', rs(PACK_INFO[p1[0]]['cmp']) if PACK_INFO[p1[0]]['cmp'] else '').replace('@@SAVE@@', ('Save ' + rs(PACK_INFO[p1[0]]['cmp'] - p1[3])) if PACK_INFO[p1[0]]['cmp'] else '').replace('@@P1@@', rs(p1[3])).replace('@@P2@@', rs(PACKS[1][3])).replace('@@PO@@', rs(PACKS[2][3])).replace('@@ORDIMG@@', pic('cxe-new-pack', 'New pink Cream X Emirates CXE Glow Restoring Face Crème pack')).replace('@@SHOWIMG@@', pic('cxe-pack-2', 'Two new pink Cream X Emirates CXE jars')).replace('@@ONL@@', rs(p1[3] - PREPAID_OFF)).replace('@@OFF@@', rs(PREPAID_OFF)).replace('@@CODFEE@@', rs(COD_FEE)).replace('@@CODP@@', rs(p1[3] + COD_FEE))
 
 def simple(path, title, desc, h1, inner, schema=None):
     write(path, layout(path, title, desc, '<section class="band" style="border:0"><div class="wrap prose"><p class="crumb"><a href="/">Home</a> › %s</p><h1>%s</h1>%s</div></section>' % (html.escape(h1), html.escape(h1), inner), schema))
