@@ -58,7 +58,7 @@ h1{font-size:clamp(1.6rem,4.5vw,2.3rem)}h2{font-size:clamp(1.3rem,3.6vw,1.8rem)}
 .top{background:var(--rose-d);color:#fff;text-align:center;font-size:.85rem;padding:7px 10px}
 header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
-.logo{font-family:Georgia,serif;font-size:1.3rem;color:var(--ink);text-decoration:none}.logo small{display:block;font:500 .68rem system-ui;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.logo{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}.logo .mark{width:38px;height:38px;flex:none;filter:drop-shadow(0 3px 8px rgba(138,45,82,.25))}.logo .lt{display:flex;flex-direction:column;line-height:1.05}.logo .ln{font:600 1.22rem/1.1 Georgia,'Times New Roman',serif;letter-spacing:.01em}.logo .ln em{font-style:italic;color:var(--rose);font-weight:700;padding:0 1px}.logo small{display:block;font:500 .68rem system-ui;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 nav a{color:var(--ink);text-decoration:none;font-size:.92rem;margin-left:16px}nav .hide-m{display:inline}@media(max-width:700px){nav .hide-m{display:none}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 1rem system-ui;text-decoration:none;cursor:pointer}
 .btn:hover{background:var(--rose-d)}.btn.wa{background:#1f8f55}.btn.wa:hover{background:#18744a}.btn.ghost{background:#fff;color:var(--rose-d);border:1.5px solid var(--rose)}.btn.block{width:100%}
@@ -200,7 +200,7 @@ def layout(path, title, desc, body, schema=None, robots='index,follow', lang='en
 <meta property="og:type" content="website"><meta property="og:title" content="%s"><meta property="og:description" content="%s"><meta property="og:url" content="%s"><meta property="og:image" content="%s/assets/og.png">
 <meta name="theme-color" content="#8a2d52">@@VERIFY@@<meta property="og:locale" content="en_IN"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css">%s%s</head><body>
 <div class="top">@@TOPBAR@@</div>
-<header class="site"><div class="wrap"><a class="logo" href="/">Cream X Emirates<small>30 ml · Free delivery in India</small></a>
+<header class="site"><div class="wrap"><a class="logo" href="/" aria-label="Cream X Emirates online store, home"><svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4608a"/><stop offset="1" stop-color="#8a2d52"/></linearGradient></defs><rect width="40" height="40" rx="12" fill="url(#lg1)"/><rect x="9" y="11" width="22" height="7" rx="3" fill="#fff" opacity=".95"/><rect x="11" y="18.5" width="18" height="11.5" rx="3.5" fill="#fff" opacity=".7"/><circle cx="29.5" cy="10" r="2.2" fill="#ffd36b"/></svg><span class="lt"><span class="ln">Cream <em>X</em> Emirates</span><small>Online store · 30 ml</small></span></a>
 <nav><a class="hide-m" href="/#how-to-use">How to use</a><a class="hide-m" href="/guides/">Guides</a><a class="hide-m" href="/faq/">FAQ</a><a class="hide-m" href="/review/">Reviews</a><a href="https://wa.me/%s" rel="noopener">WhatsApp</a></nav></div></header>
 <main>%s</main>
 <footer><div class="wrap"><div class="cols"><div><b>%s</b><p>%s<br>%s</p><p>WhatsApp: <a href="https://wa.me/%s">%s</a>%s</p></div>
@@ -299,7 +299,7 @@ def build():
     open(os.path.join(ROOT, 'assets/site.css'), 'w').write(CSS)
     open(os.path.join(ROOT, 'assets/site.js'), 'w').write(JS)
     open(os.path.join(ROOT, 'assets/jar.svg'), 'w').write(JAR)
-    open(os.path.join(ROOT, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#fbe9ef"/><rect x="12" y="18" width="40" height="12" rx="4" fill="#8a2d52"/><rect x="15" y="29" width="34" height="20" rx="5" fill="#fff" stroke="#e2c6d1"/></svg>')
+    open(os.path.join(ROOT, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d4608a"/><stop offset="1" stop-color="#8a2d52"/></linearGradient></defs><rect width="40" height="40" rx="12" fill="url(#g)"/><rect x="9" y="11" width="22" height="7" rx="3" fill="#fff"/><rect x="11" y="18.5" width="18" height="11.5" rx="3.5" fill="#fff" opacity=".75"/><circle cx="29.5" cy="10" r="2.2" fill="#ffd36b"/></svg>')
     title = '%s %s: Price, Benefits, How to Use | COD India' % (PRODUCT, SIZE)
     desc = 'Buy %s (%s) online for %s: benefits, how to use, what to expect week by week, free delivery across India and Cash on Delivery.' % (PRODUCT, SIZE, rs(PACKS[0][3]))
     sch = [product_ld(), faq_ld(FAQ[:5]), {'@context': 'https://schema.org', '@type': 'Organization', 'name': OWNER, 'url': SITE, 'address': ADDR, 'contactPoint': {'@type': 'ContactPoint', 'telephone': '+' + WA, 'contactType': 'customer service', 'areaServed': 'IN'}}]

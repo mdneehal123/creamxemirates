@@ -6,7 +6,7 @@ h1{font-size:clamp(1.6rem,4.5vw,2.3rem)}h2{font-size:clamp(1.3rem,3.6vw,1.8rem)}
 .top{background:var(--rose-d);color:#fff;text-align:center;font-size:.85rem;padding:7px 10px}
 header.site{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
-.logo{font-family:Georgia,serif;font-size:1.3rem;color:var(--ink);text-decoration:none}.logo small{display:block;font:500 .68rem system-ui;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.logo{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}.logo .mark{width:38px;height:38px;flex:none;filter:drop-shadow(0 3px 8px rgba(138,45,82,.25))}.logo .lt{display:flex;flex-direction:column;line-height:1.05}.logo .ln{font:600 1.22rem/1.1 Georgia,'Times New Roman',serif;letter-spacing:.01em}.logo .ln em{font-style:italic;color:var(--rose);font-weight:700;padding:0 1px}.logo small{display:block;font:500 .68rem system-ui;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 nav a{color:var(--ink);text-decoration:none;font-size:.92rem;margin-left:16px}nav .hide-m{display:inline}@media(max-width:700px){nav .hide-m{display:none}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--rose);color:#fff;border:0;border-radius:999px;padding:14px 22px;font:600 1rem system-ui;text-decoration:none;cursor:pointer}
 .btn:hover{background:var(--rose-d)}.btn.wa{background:#1f8f55}.btn.wa:hover{background:#18744a}.btn.ghost{background:#fff;color:var(--rose-d);border:1.5px solid var(--rose)}.btn.block{width:100%}
