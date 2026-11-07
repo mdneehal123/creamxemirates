@@ -133,7 +133,7 @@ def build_all(B, sch, title, desc):
     G = guides(None, rs, MRP, PACKS, PRODUCT, SIZE, WA, WA_SHOW, B['PREPAID_OFF'], B['COD_FEE'], {k: v['cmp'] for k, v in B['PACK_INFO'].items()})
     L = local_pages(rs, PACKS, MRP)
     import seo2
-    G = G + seo2.guides2(rs, PACKS, B['PREPAID_OFF'], B['COD_FEE'], WA, WA_SHOW)
+    G = G + seo2.guides2(rs, PACKS, B['PREPAID_OFF'], B['COD_FEE'], WA, WA_SHOW) + seo2.guides3(rs, PACKS, B['PREPAID_OFF'], B['COD_FEE'], WA, WA_SHOW)
     L = L + seo2.locals2(rs, PACKS)
     p1 = PACKS[0][3]
     short = lambda g: g['title'].split(':')[0]

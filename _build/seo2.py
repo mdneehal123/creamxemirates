@@ -5,11 +5,11 @@ def guides2(rs, PACKS, OFF, CODF, WA, WA_SHOW):
     p1, p2, po = PACKS[0][3], PACKS[1][3], PACKS[2][3]
     return [
         dict(slug='cxe-glow-restoring-face-creme', short='CXE crème',
-             title='CXE Glow Restoring Face Crème: The New Name of Cream X Emirates',
+             title='CXE Glow Restoring Face Crème (Crème X): The New Name of Cream X Emirates',
              seo='CXE Glow Restoring Face Crème (Cream X Emirates) 30 ml: Price, Use',
              desc='CXE Glow Restoring Face Crème is the new pink-jar pack of Cream X Emirates. What CXE means, what changed, price (%s), how to use it, and who should not use it.' % rs(p1),
              answer='<b>CXE</b> is short for <b>Cream X Emirates</b>. The <b>CXE Glow Restoring Face Crème</b> is the brand\'s new pink 30 ml jar, which replaced the old white jar; the brand says the <b>formula is the same</b>. Here it is <b>%s</b> (MRP ₹2,200), %s for two.' % (rs(p1), rs(p2)),
-             body='''<h2>CXE, Cream X Emirates, crème X: one product</h2><p>You may see the same cream called <b>Cream X Emirates</b>, <b>CXE</b>, <b>CXE crème</b> or <b>crème X</b>. The new pack says "cxe Glow Restoring Face Crème" on the lid and "crème X" on the side, 30 ml / 1.05 fl oz.</p>
+             body='''<h2>CXE, Cream X Emirates, Crème X: one product</h2><p>You may see the same cream called <b>Cream X Emirates</b>, <b>CXE</b>, <b>CXE crème</b>, <b>Crème X</b> or <b>Creme X</b>. The new pack says "cxe Glow Restoring Face Crème" on the lid and "crème X" on the side, 30 ml / 1.05 fl oz.</p>
 <h2>What the brand says it does</h2><ul><li>Brightens skin</li><li>Deep hydration</li><li>Improves skin texture</li><li>Nourishes and repairs</li></ul><p>Like any face cream, it works gradually: softer skin in a few weeks, a more even look over 8 to 12 weeks with daily sunscreen. Results vary.</p>
 <h2>How to use</h2><p>At night: cleanse, massage in a small amount, wait about 10 minutes, apply a thin second layer as an overnight mask, and rinse with cold water in the morning. Full steps: <a href="/how-to-use-cream-x-emirates/">how to use Cream X Emirates</a>.</p>
 <h2>Price</h2><div class="tbl"><table class="spec"><tbody><tr><td>1 new pink jar</td><td><s>₹2,200</s> <b>%s</b></td></tr><tr><td>2 new pink jars</td><td><s>₹4,400</s> <b>%s</b></td></tr><tr><td>1 old white jar (clearance)</td><td><s>₹999</s> <b>%s</b></td></tr></tbody></table></div><p>Pay online for %s off; Cash on Delivery adds %s. Delivery is free across India.</p>
@@ -74,4 +74,35 @@ def locals2(rs, PACKS):
              faq=[('Cream X Emirates விலை என்ன?', 'ஒரு புதிய 30 ml ஜாடி %s, இலவச டெலிவரியுடன்.' % rs(p1)),
                   ('கேஷ் ஆன் டெலிவரி உண்டா?', 'ஆம், ₹100 கூடுதல் கட்டணத்துடன். ஆன்லைனில் செலுத்தினால் ₹50 தள்ளுபடி.'),
                   ('எத்தனை நாளில் பலன்?', '8–12 வாரங்கள், தினமும் சன்ஸ்கிரீனுடன்.')]),
+    ]
+
+def guides3(rs, PACKS, OFF, CODF, WA, WA_SHOW):
+    p1, p2, po = PACKS[0][3], PACKS[1][3], PACKS[2][3]
+    return [
+        dict(slug='is-cream-x-emirates-a-whitening-cream', short='Whitening cream?',
+             title='Is Cream X Emirates a Whitening Cream? What It Can and Cannot Do',
+             seo='Is Cream X Emirates a Whitening Cream? Honest Answer',
+             desc='Cream X Emirates is often sold as a "whitening cream". What a face cream like this can realistically do for tan, dullness and dark spots, what it cannot do, and how to get the best results safely.',
+             answer='Cream X Emirates is often <b>advertised as a whitening cream</b>, but no face cream changes your natural skin colour. What it can do, used nightly with <b>daily sunscreen</b>, is make skin look <b>brighter, more even and softer</b>, with tan and dark spots looking lighter over <b>8 to 12 weeks</b>.',
+             body='''<h2>What it can do</h2><ul><li>Help skin look brighter and less dull</li><li>Help tan and uneven patches look lighter over weeks</li><li>Keep skin hydrated and softer overnight</li></ul>
+<h2>What no cream can do</h2><ul><li>Change your natural, genetic skin colour</li><li>Remove deep pigmentation or melasma on its own</li><li>Work in 7 days. Claims like "fair in a week" are not realistic</li></ul>
+<h2>Why "whitening" claims need care</h2><p>Some unbranded "fast whitening" creams have been found to contain steroids or mercury, which can damage skin. Buy only sealed packs with a printed ingredient list, batch number and expiry date. Read <a href="/original-cream-x-emirates/">how to check an original pack</a>.</p>
+<h2>How to get the best result</h2><ol><li>Use it every night, following the <a href="/how-to-use-cream-x-emirates/">brand's routine</a>.</li><li>Wear SPF 30+ sunscreen every morning: it matters more than any cream for tan.</li><li>Give it 8 to 12 weeks before judging.</li></ol>
+<p>New pink jar: <b>%s</b> (MRP ₹2,200) · 2 jars: <b>%s</b> · old white jar: <b>%s</b>. %s off when you pay online.</p>''' % (rs(p1), rs(p2), rs(po), rs(OFF)),
+             faq=[('Does Cream X Emirates make skin fair?', 'It can make skin look brighter and more even over weeks with sunscreen, but it does not change your natural skin colour.'),
+                  ('How fast does Cream X Emirates work?', 'Skin often feels softer in 2 to 4 weeks; tan and dark spots look lighter over 8 to 12 weeks with daily sunscreen.'),
+                  ('Is it safe to use every day?', 'Most adults can use it nightly. Patch test first; the brand does not recommend it for children under 14, pregnant women or elderly people.')]),
+
+        dict(slug='where-to-buy-cream-x-emirates', short='Where to buy',
+             title='Where to Buy Original Cream X Emirates in India (With COD)',
+             seo='Where to Buy Original Cream X Emirates Online in India',
+             desc='Where to buy original Cream X Emirates online in India: what to check before you pay, why very low prices are risky, and how to order sealed packs with Cash on Delivery.',
+             answer='Buy Cream X Emirates from a seller that ships <b>sealed packs</b>, shows a <b>full address and phone number</b>, offers <b>returns</b>, and sells at a sensible price. Here you get sealed stock with <b>free delivery</b>, <b>online payment (%s off)</b> or <b>Cash on Delivery</b>, and a <b>7-day return</b> on sealed packs.' % rs(OFF),
+             body='''<h2>Checklist before you buy anywhere</h2><ul><li><b>Seller details:</b> a real business name, address and phone or WhatsApp number.</li><li><b>Sealed pack:</b> the jar should arrive sealed, with printed batch and expiry details.</li><li><b>Fair price:</b> a price far below others usually means old, refilled or fake stock.</li><li><b>Returns:</b> a clear return policy for damaged or wrong items.</li><li><b>Payment:</b> secure online payment or Cash on Delivery, never a request to pay a personal account first.</li></ul>
+<h2>Buying here</h2><div class="tbl"><table class="spec"><tbody><tr><td>1 new pink jar</td><td><s>₹2,200</s> <b>%s</b></td></tr><tr><td>2 new pink jars</td><td><s>₹4,400</s> <b>%s</b></td></tr><tr><td>1 old white jar (clearance)</td><td><s>₹999</s> <b>%s</b></td></tr><tr><td>Delivery</td><td>Free across India, 3 to 7 business days</td></tr><tr><td>Payment</td><td>Online (%s off) or Cash on Delivery (+%s)</td></tr><tr><td>Returns</td><td>7 days on sealed packs</td></tr></tbody></table></div>
+<p>We are an independent seller, not the brand. Questions before you order? WhatsApp <a href="https://wa.me/%s">%s</a>.</p>
+<p><a class="btn" href="/#order">Order now</a></p>''' % (rs(p1), rs(p2), rs(po), rs(OFF), rs(CODF), WA, WA_SHOW),
+             faq=[('Is Cream X Emirates available with Cash on Delivery?', 'Yes, here with a %s COD charge, or pay online and save %s.' % (rs(CODF), rs(OFF))),
+                  ('How do I know I am getting an original pack?', 'Check that it arrives sealed with printed batch and expiry details. Send us a photo on WhatsApp if anything looks wrong within 48 hours.'),
+                  ('Do you deliver all over India?', 'Yes, to most pincodes, with free delivery and tracking.')]),
     ]
